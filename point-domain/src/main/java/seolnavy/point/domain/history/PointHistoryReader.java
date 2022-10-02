@@ -1,10 +1,10 @@
 package seolnavy.point.domain.history;
 
-import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
 
 public interface PointHistoryReader {
 
-	List<PointHistory> getPointHistoryList(String userId, Pageable pageable);
-	
+	Stream<PointHistory> getPointHistoryList(Long userId, Pageable pageable);
+
 }

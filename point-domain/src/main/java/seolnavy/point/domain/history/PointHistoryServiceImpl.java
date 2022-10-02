@@ -25,9 +25,9 @@ public class PointHistoryServiceImpl implements PointHistoryService {
 		pointHistoryStore.save(request.toEntity());
 	}
 
-	@Override public List<Main> getPointHistoryList(final String userId, final Pageable pageable) {
-		final List<PointHistory> pointHistoryList = pointHistoryReader.getPointHistoryList(userId, pageable);
-		return pointHistoryList.stream()
+	@Override public List<Main> getPointHistoryList(final Long userNo, final Pageable pageable) {
+		final var pointHistoryList = pointHistoryReader.getPointHistoryList(userNo, pageable);
+		return pointHistoryList
 				.map(PointHistoryInfo.Main::of)
 				.collect(toList());
 	}

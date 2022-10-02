@@ -40,18 +40,18 @@ public class PointHistory extends BaseEntity<Long> {
 	@Column(name = "DEDUCT_POINT_NO")
 	private Long deductPointNo; // 포인트차감번호
 
-	@Column(name = "HISTORY_TYPE", length = 10, nullable = false) @Enumerated(EnumType.STRING)
+	@Column(name = "HISTORY_TYPE", length = 20, nullable = false) @Enumerated(EnumType.STRING)
 	private PointHistoryType historyType; // 내역구분
 
 	@Column(name = "POINT", nullable = false)
-	private String point; // 포인트
+	private Long point; // 포인트
 
 	public static PointHistory create(
 			@NonNull final Long userNo,  // 회원번호
 			final Long earnPointNo,  // 적립포인트번호
 			final Long deductPointNo,  // 포인트차감번호
 			@NonNull final PointHistoryType historyType,  // 내역구분
-			@NonNull final String point  // 포인트
+			@NonNull final Long point  // 포인트
 	) {
 		return entityBuilder()
 				.userNo(userNo) // 회원번호

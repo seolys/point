@@ -16,7 +16,7 @@ public class PointHistoryCommand {
 
 		private PointHistoryType pointHistoryType; // 내역구분
 
-		private String point; // 포인트
+		private Long point; // 포인트
 
 		public PointHistory toEntity() {
 			return PointHistory.create(userNo, earnPointNo, deductPointNo, pointHistoryType, point);

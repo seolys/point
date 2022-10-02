@@ -1,0 +1,11 @@
+### 회원별 포인트 조회
+GET http://localhost:8080/api/v1/points/1
+Content-Type: application/json
+
+### 회원별 포인트 적립/사용내역 조회
+GET http://localhost:8080/api/v1/points/1/history?page=0&size=10
+Content-Type: application/json
+
+### 회원별 포인트 적립/사용내역 조회
+GET http://localhost:8080/api/v1/points/1/history?page=1&size=10
+Content-Type: application/json

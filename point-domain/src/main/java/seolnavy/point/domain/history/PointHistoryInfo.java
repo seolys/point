@@ -1,5 +1,6 @@
 package seolnavy.point.domain.history;
 
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +17,12 @@ public class PointHistoryInfo {
 
 		private PointHistoryType historyType; // 내역구분
 
-		private String point; // 포인트
+		private Long point; // 포인트
+
+		private LocalDateTime createdDate;
 
 		public static Main of(final PointHistory pointHistory) {
-			return Main.of(pointHistory.getPointHistoryNo(), pointHistory.getHistoryType(), pointHistory.getPoint());
+			return Main.of(pointHistory.getPointHistoryNo(), pointHistory.getHistoryType(), pointHistory.getPoint(), pointHistory.getCreatedDate());
 		}
 	}
 
