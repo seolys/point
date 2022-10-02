@@ -38,7 +38,7 @@ public class DeductPointDetail extends BaseEntity<Long> {
 	@Column(name = "EARN_POINT_NO", nullable = false)
 	private Long earnPointNo; // 적립포인트번호
 
-	@Column(name = "POINT", nullable = false)
+	@Column(name = "DEDUCT_POINT", nullable = false)
 	private Long point; // 차감포인트
 
 	@ManyToOne
@@ -60,5 +60,5 @@ public class DeductPointDetail extends BaseEntity<Long> {
 	@Override public Long getId() {
 		return usedPointDetailNo;
 	}
-	
+
 }
