@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import seolnavy.point.application.PointCommandFacade;
 import seolnavy.point.common.response.CommonResponse;
 import seolnavy.point.common.response.ResponseCode;
+import seolnavy.point.interfaces.controller.dto.CancelDeductPointDto;
 import seolnavy.point.interfaces.controller.dto.DeductPointDto;
 import seolnavy.point.interfaces.controller.dto.EarnPointDto;
+import seolnavy.point.interfaces.controller.mapper.CancelDeductPointDtoMapper;
 import seolnavy.point.interfaces.controller.mapper.DeductPointDtoMapper;
 import seolnavy.point.interfaces.controller.mapper.EarnPointDtoMapper;
 
@@ -30,7 +32,7 @@ public class PointCommandController {
 	 * @return
 	 */
 	@PostMapping("/{userNo}/earn")
-	public CommonResponse<Void> earnPointDto(@PathVariable("userNo") final long userNo, @RequestBody final EarnPointDto.Request request) {
+	public CommonResponse<Void> earnPoint(@PathVariable("userNo") final long userNo, @RequestBody final EarnPointDto.Request request) {
 		final var command = EarnPointDtoMapper.of(userNo, request);
 		pointCommandFacade.earnPoint(command);
 		return CommonResponse.of(ResponseCode.SUCCESS);
@@ -43,13 +45,20 @@ public class PointCommandController {
 	 * @return
 	 */
 	@PostMapping("/{userNo}/deduct")
-	public CommonResponse<DeductPointDto.Response> deductPointDto(@PathVariable("userNo") final long userNo, @RequestBody final DeductPointDto.Request request) {
+	public CommonResponse<DeductPointDto.Response> deductPoint(@PathVariable("userNo") final long userNo, @RequestBody final DeductPointDto.Request request) {
 		final var command = DeductPointDtoMapper.of(userNo, request);
 
 		final var deductPointInfo = pointCommandFacade.deductPoint(command);
 
 		final var response = DeductPointDtoMapper.of(deductPointInfo);
 		return CommonResponse.of(response);
+	}
+
+	@PostMapping("/{userNo}/cancel-deduct")
+	public CommonResponse<Void> cancelDeductPoint(@PathVariable("userNo") final long userNo, @RequestBody final CancelDeductPointDto.Request request) {
+		final var command = CancelDeductPointDtoMapper.of(userNo, request);
+		pointCommandFacade.cancelDeductPoint(command);
+		return CommonResponse.of(ResponseCode.SUCCESS);
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seolnavy.point.domain.history.PointHistoryCommand.RegisterPointHistory;
 import seolnavy.point.domain.history.PointHistoryInfo.Main;
+import seolnavy.point.domain.history.exception.PointHistoryNotFound;
 
 @Slf4j
 @Service
@@ -30,6 +31,12 @@ public class PointHistoryServiceImpl implements PointHistoryService {
 		return pointHistoryList
 				.map(PointHistoryInfo.Main::of)
 				.collect(toList());
+	}
+
+	@Override public void cancelDeductPoint(final Long deductPointNo) {
+		final var pointHistory = pointHistoryReader.findByDeductPointNo(deductPointNo)
+				.orElseThrow(PointHistoryNotFound::new);
+		pointHistory.deductCancel();
 	}
 
 }

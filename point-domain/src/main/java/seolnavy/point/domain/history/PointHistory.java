@@ -15,8 +15,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import seolnavy.point.domain.BaseEntity;
+import seolnavy.point.domain.history.exception.UncancellableException;
 
+@Slf4j
 @Getter
 @Entity
 @Table(name = "POINT_HISTORY")
@@ -46,6 +49,14 @@ public class PointHistory extends BaseEntity<Long> {
 	@Column(name = "POINT", nullable = false)
 	private Long point; // 포인트
 
+	public void deductCancel() {
+		if (PointHistoryType.DEDUCT != historyType) {
+			log.error("포인트 차감 내역만 취소가 가능합니다. pointHistoryNo={}, historyType={}", pointHistoryNo, historyType);
+			throw new UncancellableException();
+		}
+		historyType = PointHistoryType.DEDUCT_CANCEL;
+	}
+
 	public static PointHistory create(
 			@NonNull final Long userNo,  // 회원번호
 			final Long earnPointNo,  // 적립포인트번호
@@ -65,5 +76,4 @@ public class PointHistory extends BaseEntity<Long> {
 	@Override public Long getId() {
 		return pointHistoryNo;
 	}
-
 }

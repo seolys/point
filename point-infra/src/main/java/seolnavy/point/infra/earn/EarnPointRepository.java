@@ -18,4 +18,6 @@ public interface EarnPointRepository extends JpaRepository<EarnPoint, Long> {
 	 */
 	List<EarnPoint> findActivePointsByUserNoAndExpirationDateGreaterThanEqualAndRemainPointGreaterThanOrderByEarnPointNoAsc(
 			Long userNo, LocalDate expirationDate, Long remainPoint);
+
+	List<EarnPoint> findByEarnPointNoIn(List<Long> earnPointNos);
 }

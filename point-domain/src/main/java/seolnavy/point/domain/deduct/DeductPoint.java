@@ -23,11 +23,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import seolnavy.point.domain.BaseEntity;
+import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 
 /**
  * 포인트 차감
  */
+@Slf4j
 @Getter
 @Entity
 @Table(
@@ -55,7 +58,7 @@ public class DeductPoint extends BaseEntity<Long> {
 	@Column(name = "DEDUCT_POINT", nullable = false)
 	private Long deductPoint; // 차감포인트
 
-	@Column(name = "DEDUCT_STATUS", length = 10, nullable = false) @Enumerated(EnumType.STRING)
+	@Column(name = "DEDUCT_STATUS", length = 15, nullable = false) @Enumerated(EnumType.STRING)
 	private DeductPointStatus deductStatus; // 포인트 사용 상태
 
 	@Version
@@ -82,4 +85,13 @@ public class DeductPoint extends BaseEntity<Long> {
 	@Override public Long getId() {
 		return deductPointNo;
 	}
+
+	public void cancel() {
+		if (DeductPointStatus.DEDUCT_CANCEL == this.deductStatus) {
+			log.error("이미 취소된 포인트 차감입니다. deductPointNo: {}", this.deductPointNo);
+			throw new PointsAlreadyCancelledException();
+		}
+		this.deductStatus = DeductPointStatus.DEDUCT_CANCEL;
+	}
+
 }

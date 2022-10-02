@@ -75,6 +75,10 @@ public class EarnPoint extends BaseEntity<Long> {
 		return deductionPoints;
 	}
 
+	public void restorePoint(final Long restorePoint) {
+		this.remainPoint += restorePoint;
+	}
+
 	public static EarnPoint create(
 			@NonNull final String earnUuid,  // 적립_UUID
 			@NonNull final Long userNo,  // 회원번호

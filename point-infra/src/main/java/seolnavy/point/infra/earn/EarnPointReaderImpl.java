@@ -21,4 +21,8 @@ public class EarnPointReaderImpl implements EarnPointReader {
 		return earnPointRepository.findActivePointsByUserNoAndExpirationDateGreaterThanEqualAndRemainPointGreaterThanOrderByEarnPointNoAsc(
 				userNo, LocalDate.now(), 0L);
 	}
+
+	@Override public List<EarnPoint> findAllByIds(final List<Long> earnPointNos) {
+		return earnPointRepository.findByEarnPointNoIn(earnPointNos);
+	}
 }

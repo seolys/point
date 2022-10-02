@@ -1,5 +1,6 @@
 package seolnavy.point.domain.earn;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +31,24 @@ public class EarnPointCommand {
 
 		private Long userNo; // 회원번호
 
-		private Long deductPoint; // 차감포인트
+		private Long point; // 차감포인트
 
+	}
+
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class RestorePoint {
+
+		List<RestorePointInfo> restorePointInfos;
+	}
+
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class RestorePointInfo {
+
+		private Long earnPointNo; // 적립포인트번호
+
+		private Long deductPoint; // 차감포인트
 	}
 
 }

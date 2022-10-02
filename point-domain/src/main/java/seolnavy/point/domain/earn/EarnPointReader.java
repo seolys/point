@@ -8,4 +8,5 @@ public interface EarnPointReader {
 
 	List<EarnPoint> findUserActivePoints(Long userNo);
 
+	List<EarnPoint> findAllByIds(List<Long> earnPointNos);
 }

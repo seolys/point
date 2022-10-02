@@ -66,6 +66,8 @@ public class DeductPointCommand {
 	@AllArgsConstructor(staticName = "of")
 	public static class CancelDeductPoint {
 
+		private Long userNo; // 회원번호
+
 		private Long deductPointNo; // 포인트차감번호
 
 	}

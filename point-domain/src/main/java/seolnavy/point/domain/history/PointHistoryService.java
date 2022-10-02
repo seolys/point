@@ -16,4 +16,6 @@ public interface PointHistoryService {
 	 */
 	List<PointHistoryInfo.Main> getPointHistoryList(Long userId, Pageable pageable);
 
+	void cancelDeductPoint(Long deductPointNo);
+
 }

@@ -1,5 +1,6 @@
 package seolnavy.point.infra.history;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ public class PointHistoryReaderImpl implements PointHistoryReader {
 	@Override public Stream<PointHistory> getPointHistoryList(final Long userNo, final Pageable pageable) {
 		final var pointHistoryTypes = Set.of(PointHistoryType.EARN, PointHistoryType.DEDUCT, PointHistoryType.EXPIRE);
 		return pointHistoryRepository.findAllByUserNoAndHistoryTypeInOrderByCreatedDateDesc(userNo, pointHistoryTypes, pageable);
+	}
+
+	@Override public Optional<PointHistory> findByDeductPointNo(final Long deductPointNo) {
+		return pointHistoryRepository.findByDeductPointNo(deductPointNo);
 	}
 
 }

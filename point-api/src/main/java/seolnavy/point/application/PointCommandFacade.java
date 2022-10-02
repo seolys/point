@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import seolnavy.point.application.mapper.CancelDeductPointCommandMapper;
 import seolnavy.point.application.mapper.DeductPointCommandMapper;
 import seolnavy.point.application.validator.DeductPointValidator;
+import seolnavy.point.domain.deduct.DeductPointCommand.CancelDeductPoint;
 import seolnavy.point.domain.deduct.DeductPointCommand.DeductPointRequest;
 import seolnavy.point.domain.deduct.DeductPointInfo.Main;
 import seolnavy.point.domain.deduct.DeductPointService;
@@ -67,6 +69,23 @@ public class PointCommandFacade {
 		userService.decreaseUserPoint(updatePointCommand);
 
 		return savedDeductPoint;
+	}
+
+	@Transactional
+	public void cancelDeductPoint(final CancelDeductPoint command) {
+		// 포인트 차감 취소
+		final var cancelDeductPointInfo = deductPointService.cancelDeductPoint(command);
+
+		// 포인트 복구
+		final var restorePointCommand = CancelDeductPointCommandMapper.of(cancelDeductPointInfo);
+		earnPointService.restorePoints(restorePointCommand);
+
+		// 히스토리 상태 변경
+		pointHistoryService.cancelDeductPoint(cancelDeductPointInfo.getDeductPointNo());
+
+		// 사용자 포인트 갱신
+		final var updatePointCommand = UpdatePoint.of(command.getUserNo(), cancelDeductPointInfo.getDeductPoint());
+		userService.increaseUserPoint(updatePointCommand);
 	}
 
 }
