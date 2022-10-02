@@ -2,6 +2,7 @@ package seolnavy.point.domain.user;
 
 public interface UserStore {
 
-	void saveUserPoint(User user);
+	void updateUserPoint(User user);
 
+	User save(User user);
 }

@@ -1,9 +1,11 @@
 package seolnavy.point.domain.user;
 
+import java.util.Optional;
+
 public interface UserReader {
 
-	User findUserById(Long userNo);
-	
+	Optional<User> findUserById(Long userNo);
+
 	Long getRemainPoint(Long userNo);
 
 }

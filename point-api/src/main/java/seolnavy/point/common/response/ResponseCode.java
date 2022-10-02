@@ -7,7 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResponseCode {
 	SUCCESS("0000", "Success"),
-	INVALID_PARAMETER("1001", "Invalid Parameter"),
+
+	POINTS_ALREADY_EARNED("1001", "이미 적립된 포인트입니다."),
+
+	INVALID_PARAMETER("9001", "Invalid Parameter"),
 	SYSTEM_ERROR("9999", "Internal Server Error");
 
 	private final String code;

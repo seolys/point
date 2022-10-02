@@ -1,11 +1,15 @@
 package seolnavy.point.domain.history;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointHistoryCommand {
 
+	@Getter
+	@AllArgsConstructor(staticName = "of")
 	public static class RegisterPointHistory {
 
 		private Long userNo; // 회원번호
@@ -17,6 +21,10 @@ public class PointHistoryCommand {
 		private PointHistoryType pointHistoryType; // 내역구분
 
 		private Long point; // 포인트
+
+		public static RegisterPointHistory earnPoint(final Long userNo, final Long earnPointNo, final Long point) {
+			return of(userNo, earnPointNo, null, PointHistoryType.EARN, point);
+		}
 
 		public PointHistory toEntity() {
 			return PointHistory.create(userNo, earnPointNo, deductPointNo, pointHistoryType, point);

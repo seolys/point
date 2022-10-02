@@ -1,5 +1,8 @@
 package seolnavy.point.domain.user;
 
+import seolnavy.point.domain.user.UserCommand.UpdatePoint;
+import seolnavy.point.domain.user.UserInfo.Main;
+
 public interface UserService {
 
 	/**
@@ -10,8 +13,12 @@ public interface UserService {
 	Long getRemainPoint(Long userNo);
 
 	/**
-	 * 회원 포인트 저장
+	 * 회원 포인트 증가
 	 */
-	void saveUserPoint(UserCommand.SaveUserPoint savePoint);
+	Main increaseUserPoint(UpdatePoint command);
 
+	/**
+	 * 회원 포인트 감소
+	 */
+	Main decreaseUserPoint(UpdatePoint command);
 }

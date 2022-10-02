@@ -35,6 +35,14 @@ public class User extends BaseEntity<Long> {
 	@Column(name = "VERSION", nullable = false)
 	private Long version; // 버전
 
+	public void increasePoint(final Long point) {
+		this.remainPoint += point;
+	}
+
+	public void decreasePoint(final Long point) {
+		this.remainPoint -= point;
+	}
+
 	public static User create(
 			@NonNull final Long userNo,  // 회원번호
 			@NonNull final Long remainPoint  // 잔여포인트
@@ -48,5 +56,4 @@ public class User extends BaseEntity<Long> {
 	@Override public Long getId() {
 		return userNo;
 	}
-
 }

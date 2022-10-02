@@ -1,6 +1,7 @@
 package seolnavy.point.common.exception;
 
 import static seolnavy.point.common.response.ResponseCode.INVALID_PARAMETER;
+import static seolnavy.point.common.response.ResponseCode.POINTS_ALREADY_EARNED;
 import static seolnavy.point.common.response.ResponseCode.SYSTEM_ERROR;
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import seolnavy.point.common.response.CommonResponse;
+import seolnavy.point.domain.earn.exception.PointsAlreadyEarnedException;
 
 @Slf4j
 @RestControllerAdvice
@@ -49,4 +51,11 @@ public class RestExceptionHandler {
 		return CommonResponse.of(SYSTEM_ERROR);
 	}
 
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(PointsAlreadyEarnedException.class)
+	public CommonResponse pointsAlreadyEarnedException(final PointsAlreadyEarnedException e) {
+		log.warn(POINTS_ALREADY_EARNED.getMessage(), e);
+		return CommonResponse.of(POINTS_ALREADY_EARNED);
+	}
+	
 }

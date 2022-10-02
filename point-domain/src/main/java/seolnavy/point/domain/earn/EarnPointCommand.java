@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class EarnPointCommand {
 
 	@Getter
-	@AllArgsConstructor
+	@AllArgsConstructor(staticName = "of")
 	public static class RegisterPoint {
 
 		private String earnUuid; // 적립_UUID
