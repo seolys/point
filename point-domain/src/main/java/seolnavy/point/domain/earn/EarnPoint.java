@@ -3,6 +3,8 @@ package seolnavy.point.domain.earn;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,11 +14,13 @@ import javax.persistence.Version;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import seolnavy.point.domain.BaseEntity;
+import seolnavy.point.domain.UseYn;
 
 /**
  * 포인트 증가
@@ -50,6 +54,11 @@ public class EarnPoint extends BaseEntity<Long> {
 
 	@Column(name = "REMAIN_POINT", nullable = false)
 	private Long remainPoint; // 잔여포인트
+
+	@Column(name = "EXPIRATION_YN", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Default
+	private UseYn expirationYn = UseYn.N; // 만료여부
 
 	@Column(name = "EXPIRATION_DATE", nullable = false)
 	private LocalDate expirationDate; // 만료일자
@@ -89,6 +98,7 @@ public class EarnPoint extends BaseEntity<Long> {
 				.userNo(userNo) // 회원번호
 				.earnPoint(earnPoint) // 적립포인트
 				.remainPoint(earnPoint) // 잔여포인트
+				.expirationYn(UseYn.N) // 만료여부
 				.expirationDate(LocalDate.now().plusYears(1)) // 만료일자
 				.build();
 	}

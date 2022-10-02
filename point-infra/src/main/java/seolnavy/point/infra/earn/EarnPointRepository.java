@@ -1,8 +1,8 @@
 package seolnavy.point.infra.earn;
 
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import seolnavy.point.domain.UseYn;
 import seolnavy.point.domain.earn.EarnPoint;
 
 public interface EarnPointRepository extends JpaRepository<EarnPoint, Long> {
@@ -16,8 +16,8 @@ public interface EarnPointRepository extends JpaRepository<EarnPoint, Long> {
 	 * @param remainPoint 기준금액 이상
 	 * @return
 	 */
-	List<EarnPoint> findActivePointsByUserNoAndExpirationDateGreaterThanEqualAndRemainPointGreaterThanOrderByEarnPointNoAsc(
-			Long userNo, LocalDate expirationDate, Long remainPoint);
+	List<EarnPoint> findActivePointsByUserNoAndExpirationYnAndRemainPointGreaterThanOrderByEarnPointNoAsc(
+			Long userNo, UseYn expirationYn, Long remainPoint);
 
 	List<EarnPoint> findByEarnPointNoIn(List<Long> earnPointNos);
 }
