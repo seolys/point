@@ -24,4 +24,14 @@ public class EarnPointCommand {
 
 	}
 
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class DeductPoint {
+
+		private Long userNo; // 회원번호
+
+		private Long deductPoint; // 차감포인트
+
+	}
+
 }

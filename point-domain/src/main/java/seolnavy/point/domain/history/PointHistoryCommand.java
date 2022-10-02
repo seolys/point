@@ -26,6 +26,10 @@ public class PointHistoryCommand {
 			return of(userNo, earnPointNo, null, PointHistoryType.EARN, point);
 		}
 
+		public static RegisterPointHistory deductPoint(final Long userNo, final Long deductPointNo, final Long point) {
+			return of(userNo, null, deductPointNo, PointHistoryType.DEDUCT, point);
+		}
+
 		public PointHistory toEntity() {
 			return PointHistory.create(userNo, earnPointNo, deductPointNo, pointHistoryType, point);
 		}

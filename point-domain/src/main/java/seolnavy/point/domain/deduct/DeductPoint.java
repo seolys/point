@@ -47,7 +47,7 @@ public class DeductPoint extends BaseEntity<Long> {
 	private Long deductPointNo; // 포인트차감번호
 
 	@Column(name = "DEDUCT_UUID", nullable = false)
-	private String deductUuid; // 차감_UUID
+	private String deductUuid; // 차감 UUID
 
 	@Column(name = "USER_NO", nullable = false)
 	private Long userNo; // 회원번호
@@ -67,10 +67,12 @@ public class DeductPoint extends BaseEntity<Long> {
 	private List<DeductPointDetail> deductPointDetails = new ArrayList<>();
 
 	public static DeductPoint create(
+			@NonNull final String deductUuid,  // 차감 UUID
 			@NonNull final Long userNo,  // 회원번호
 			@NonNull final Long deductPoint  // 차감포인트
 	) {
 		return entityBuilder()
+				.deductUuid(deductUuid) // 차감 UUID
 				.userNo(userNo) // 회원번호
 				.deductPoint(deductPoint) // 차감포인트
 				.deductStatus(DeductPointStatus.DEDUCT) // 포인트 사용 상태

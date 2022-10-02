@@ -1,9 +1,13 @@
 package seolnavy.point.domain.deduct;
 
+import seolnavy.point.domain.deduct.DeductPointCommand.RegisterDeductPoint;
+import seolnavy.point.domain.deduct.DeductPointInfo.Main;
+
 public interface DeductPointService {
 
-	void registerDeductPoint(DeductPointCommand.RegisterDeductPoint registerDeductPoint);
+	Main registerDeductPoint(RegisterDeductPoint registerDeductPoint);
 
 	void cancelDeductPoint(DeductPointCommand.CancelDeductPoint cancelDeductPoint);
 
+	boolean existsByDeductUuid(String deductUuid);
 }

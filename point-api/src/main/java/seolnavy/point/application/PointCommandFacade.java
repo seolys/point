@@ -4,6 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import seolnavy.point.application.mapper.DeductPointCommandMapper;
+import seolnavy.point.application.validator.DeductPointValidator;
+import seolnavy.point.domain.deduct.DeductPointCommand.DeductPointRequest;
+import seolnavy.point.domain.deduct.DeductPointInfo.Main;
+import seolnavy.point.domain.deduct.DeductPointService;
 import seolnavy.point.domain.earn.EarnPointCommand.RegisterPoint;
 import seolnavy.point.domain.earn.EarnPointInfo;
 import seolnavy.point.domain.earn.EarnPointService;
@@ -19,7 +24,10 @@ public class PointCommandFacade {
 
 	private final UserService userService;
 	private final EarnPointService earnPointService;
+	private final DeductPointService deductPointService;
 	private final PointHistoryService pointHistoryService;
+
+	private final DeductPointValidator deductPointValidator;
 
 	@Transactional
 	public void earnPoint(final RegisterPoint command) {
@@ -35,6 +43,30 @@ public class PointCommandFacade {
 		// 사용자 포인트 갱신
 		final var updateUserPointCommand = UpdatePoint.of(command.getUserNo(), earnedPointInfo.getEarnPoint());
 		userService.increaseUserPoint(updateUserPointCommand);
+	}
+
+	@Transactional
+	public Main deductPoint(final DeductPointRequest request) {
+		// 유효성 체크
+		deductPointValidator.validate(request);
+
+		// 포인트 차감
+		final var deductPointResults = earnPointService.deductPoints(DeductPointCommandMapper.of(request));
+
+		// 차감내역 등록
+		final var savedDeductPoint = deductPointService.registerDeductPoint(DeductPointCommandMapper.of(request, deductPointResults));
+		final var deductPointNo = savedDeductPoint.getDeductPointNo(); // 포인트 차감번호
+
+		// 히스토리 생성
+		final var historyCommand = RegisterPointHistory.deductPoint(
+				request.getUserNo(), deductPointNo, request.getDeductPoint());
+		pointHistoryService.registerEarnPoint(historyCommand);
+
+		// 사용자 포인트 갱신
+		final var updatePointCommand = UpdatePoint.of(request.getUserNo(), request.getDeductPoint());
+		userService.decreaseUserPoint(updatePointCommand);
+
+		return savedDeductPoint;
 	}
 
 }

@@ -1,6 +1,6 @@
 package seolnavy.point.domain.earn;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,11 +52,28 @@ public class EarnPoint extends BaseEntity<Long> {
 	private Long remainPoint; // 잔여포인트
 
 	@Column(name = "EXPIRATION_DATE", nullable = false)
-	private LocalDateTime expirationDate; // 만료일자
+	private LocalDate expirationDate; // 만료일자
 
 	@Version
 	@Column(name = "VERSION", nullable = false)
 	private Long version; // 버전
+
+	/**
+	 * 포인트 차감
+	 * @param deductionPoints 차감할 포인트
+	 * @return 차감된 포인트
+	 */
+	public long deductPoint(final Long deductionPoints) {
+		// 잔액이 차감금액보다 작으면, 잔액을 0원으로 만들고 기존 잔액을 반환.
+		if (this.remainPoint < deductionPoints) {
+			final long previousRemainPoint = this.remainPoint; // 이전 잔액 백업
+			this.remainPoint = 0L;
+			return previousRemainPoint; // 이전 잔액 반환
+		}
+		// 잔액이 차감금액보다 크면, 잔액에서 차감금액을 차감하고 차감금액을 반환.
+		this.remainPoint -= deductionPoints;
+		return deductionPoints;
+	}
 
 	public static EarnPoint create(
 			@NonNull final String earnUuid,  // 적립_UUID
@@ -68,7 +85,7 @@ public class EarnPoint extends BaseEntity<Long> {
 				.userNo(userNo) // 회원번호
 				.earnPoint(earnPoint) // 적립포인트
 				.remainPoint(earnPoint) // 잔여포인트
-				.expirationDate(LocalDateTime.now().plusYears(1)) // 만료일자
+				.expirationDate(LocalDate.now().plusYears(1)) // 만료일자
 				.build();
 	}
 

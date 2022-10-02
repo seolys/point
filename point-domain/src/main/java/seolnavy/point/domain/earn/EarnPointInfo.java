@@ -1,6 +1,6 @@
 package seolnavy.point.domain.earn;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class EarnPointInfo {
 
 		private Long remainPoint; // 잔여포인트
 
-		private LocalDateTime expirationDate; // 만료일자
+		private LocalDate expirationDate; // 만료일자
 
 		public static Main of(final EarnPoint saveEarnPoint) {
 			return Main.of(
@@ -35,6 +35,15 @@ public class EarnPointInfo {
 					saveEarnPoint.getExpirationDate() // 만료일자
 			);
 		}
+	}
+
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class DeductPointResult {
+
+		private Long earnPointNo; // 적립포인트번호
+
+		private Long deductedPoint; // 차감된 포인트
 	}
 
 }

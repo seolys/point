@@ -13,16 +13,16 @@ public class CommonResponse<T> {
 	private String message;
 	private T data;
 
-	public static CommonResponse of(final ResponseCode responseCode) {
-		return new CommonResponse(responseCode.getCode(), responseCode.getMessage(), null);
+	public static CommonResponse<Void> of(final ResponseCode responseCode) {
+		return new CommonResponse<>(responseCode.getCode(), responseCode.getMessage(), null);
 	}
 
-	public static CommonResponse of(final String code, final String message) {
-		return new CommonResponse(code, message, null);
+	public static CommonResponse<Void> of(final String code, final String message) {
+		return new CommonResponse<>(code, message, null);
 	}
 
 	public static <T> CommonResponse<T> of(final T data) {
-		return new CommonResponse(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data);
+		return new CommonResponse<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), data);
 	}
 
 }
