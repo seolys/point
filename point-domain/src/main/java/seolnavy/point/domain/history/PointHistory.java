@@ -19,7 +19,7 @@ import seolnavy.point.domain.BaseEntity;
 
 @Getter
 @Entity
-@Table
+@Table(name = "POINT_HISTORY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)

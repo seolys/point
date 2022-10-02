@@ -16,11 +16,11 @@ import seolnavy.point.domain.BaseEntity;
 
 @Getter
 @Entity
-@Table
+@Table(name = "USER_POINT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class User extends BaseEntity<Long> {
 
 	@Id

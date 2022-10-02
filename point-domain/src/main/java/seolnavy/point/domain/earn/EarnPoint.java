@@ -24,12 +24,13 @@ import seolnavy.point.domain.BaseEntity;
 @Getter
 @Entity
 @Table(
-		uniqueConstraints = @UniqueConstraint(name = "UNI_EARN_POINT_UUID", columnNames = {"earnUuid"})
+		name = "EARN_POINT",
+		uniqueConstraints = @UniqueConstraint(name = "UNI_EARN_POINT_UUID", columnNames = {"EARN_UUID"})
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class EarnPoint extends BaseEntity<Long> {
 
 	@Id

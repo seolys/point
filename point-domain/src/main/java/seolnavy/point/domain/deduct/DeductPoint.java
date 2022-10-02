@@ -13,10 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +30,14 @@ import seolnavy.point.domain.BaseEntity;
  */
 @Getter
 @Entity
-@Table
+@Table(
+		name = "DEDUCT_POINT",
+		uniqueConstraints = @UniqueConstraint(name = "UNI_DEDUCT_POINT_UUID", columnNames = {"DEDUCT_UUID"})
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class DeductPoint extends BaseEntity<Long> {
 
 	@Id
@@ -57,7 +62,8 @@ public class DeductPoint extends BaseEntity<Long> {
 	@Column(name = "VERSION", nullable = false)
 	private Long version; // 버전
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "item", cascade = CascadeType.PERSIST)
+	@Default
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deductPoint", cascade = CascadeType.PERSIST)
 	private List<DeductPointDetail> deductPointDetails = new ArrayList<>();
 
 	public static DeductPoint create(

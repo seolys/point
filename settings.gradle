@@ -1,3 +1,5 @@
 rootProject.name = 'point'
 
+include 'point-api'
 include 'point-domain'
+include 'point-infra'
