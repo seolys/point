@@ -10,13 +10,14 @@ import seolnavy.point.domain.user.UserStore;
 public class UserStoreImpl implements UserStore {
 
 	private final UserRepository userRepository;
+	private final UserRedisRepository userRedisRepository;
 
 	@Override public User save(final User user) {
 		return userRepository.save(user);
 	}
 
-	@Override public void updateUserPoint(final User user) {
-
+	@Override public void setUserPointToCache(final Long userNo, final Long remainPoint) {
+		userRedisRepository.saveRemainPoint(userNo, remainPoint);
 	}
 
 }

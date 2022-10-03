@@ -1,5 +1,11 @@
 dependencies {
     api 'com.h2database:h2'
+
+    api 'org.springframework.boot:spring-boot-starter-data-redis'
+    api(group: 'it.ozimov', name: 'embedded-redis', version: '0.7.3') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+    }
+
     implementation project(':point-domain')
 }
 

@@ -11,15 +11,22 @@ import seolnavy.point.domain.user.UserReader;
 public class UserReaderImpl implements UserReader {
 
 	private final UserRepository userRepository;
+	private final UserRedisRepository redisRepository;
 
 	@Override public Optional<User> findUserById(final Long userNo) {
 		return userRepository.findById(userNo);
 	}
 
 	@Override public Long getRemainPoint(final Long userNo) {
-		return userRepository.findById(userNo)
+		final var userRemainPoint = redisRepository.getUserRemainPoint(userNo);
+		if (userRemainPoint.isPresent()) {
+			return userRemainPoint.get();
+		}
+		final var remainPoint = userRepository.findById(userNo)
 				.map(User::getRemainPoint)
 				.orElse(0L);
+		redisRepository.saveRemainPoint(userNo, remainPoint);
+		return remainPoint;
 	}
 
 }
