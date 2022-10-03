@@ -1,7 +1,9 @@
 package seolnavy.point.application;
 
+import javax.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import seolnavy.point.application.mapper.CancelDeductPointCommandMapper;
@@ -18,6 +20,7 @@ import seolnavy.point.domain.history.PointHistoryCommand.RegisterPointHistory;
 import seolnavy.point.domain.history.PointHistoryService;
 import seolnavy.point.domain.user.UserCommand.UpdatePoint;
 import seolnavy.point.domain.user.UserService;
+import seolnavy.point.infra.user.UserRepository;
 
 @Slf4j
 @Component
@@ -25,12 +28,14 @@ import seolnavy.point.domain.user.UserService;
 public class PointCommandFacade {
 
 	private final UserService userService;
+	private final UserRepository userRepository;
 	private final EarnPointService earnPointService;
 	private final DeductPointService deductPointService;
 	private final PointHistoryService pointHistoryService;
 
 	private final DeductPointValidator deductPointValidator;
 
+	@Retryable(value = OptimisticLockException.class)
 	@Transactional
 	public EarnPointInfo.Main earnPoint(final RegisterPoint command) {
 		// 포인트 적립
@@ -49,6 +54,7 @@ public class PointCommandFacade {
 		return earnedPointInfo;
 	}
 
+	@Retryable(value = OptimisticLockException.class)
 	@Transactional
 	public Main deductPoint(final DeductPointRequest request) {
 		// 유효성 체크
@@ -73,6 +79,7 @@ public class PointCommandFacade {
 		return savedDeductPoint;
 	}
 
+	@Retryable(value = OptimisticLockException.class)
 	@Transactional
 	public void cancelDeductPoint(final CancelDeductPoint command) {
 		// 포인트 차감 취소

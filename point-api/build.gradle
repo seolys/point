@@ -1,7 +1,8 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
+    implementation 'org.springframework.retry:spring-retry'
+    
     // module (rootProject.settings.gradle include와 매칭)
     implementation project(':point-domain')
     implementation project(':point-infra')
