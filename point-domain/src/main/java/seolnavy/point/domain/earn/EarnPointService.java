@@ -7,6 +7,7 @@ import seolnavy.point.domain.earn.EarnPointCommand.RegisterPoint;
 import seolnavy.point.domain.earn.EarnPointCommand.RestorePoint;
 import seolnavy.point.domain.earn.EarnPointInfo.DeductPointResult;
 import seolnavy.point.domain.earn.EarnPointInfo.Main;
+import seolnavy.point.domain.earn.EarnPointInfo.RestorePointsResult;
 
 public interface EarnPointService {
 
@@ -14,6 +15,6 @@ public interface EarnPointService {
 
 	List<DeductPointResult> deductPoints(DeductPoint command);
 
-	void restorePoints(RestorePoint command);
+	RestorePointsResult restorePoints(RestorePoint command);
 
 }

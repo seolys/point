@@ -1,7 +1,7 @@
 package seolnavy.point.domain.earn;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import seolnavy.point.domain.earn.EarnPointCommand.DeductPoint;
 import seolnavy.point.domain.earn.EarnPointCommand.RegisterPoint;
 import seolnavy.point.domain.earn.EarnPointCommand.RestorePoint;
-import seolnavy.point.domain.earn.EarnPointCommand.RestorePointInfo;
 import seolnavy.point.domain.earn.EarnPointInfo.DeductPointResult;
 import seolnavy.point.domain.earn.EarnPointInfo.Main;
+import seolnavy.point.domain.earn.EarnPointInfo.RestorePointsResult;
+import seolnavy.point.domain.earn.EarnPointInfo.RestoredPointInfo;
 import seolnavy.point.domain.earn.exception.PointsAlreadyEarnedException;
 
 @Slf4j
@@ -56,19 +57,20 @@ public class EarnPointServiceImpl implements EarnPointService {
 	}
 
 	@Transactional
-	@Override public void restorePoints(final RestorePoint command) {
-		final var restorePointInfos = command.getRestorePointInfos();
-		final var earnPointNos = restorePointInfos.stream()
-				.map(RestorePointInfo::getEarnPointNo)
-				.collect(Collectors.toList());
+	@Override public RestorePointsResult restorePoints(final RestorePoint command) {
+		// DB에서 복구할 대상 조회
+		final var earnPoints = earnPointReader.findAllByIds(command.getEarnPointNos());
 
-		final var deductPointMapByEarnPointNo = restorePointInfos.stream()
-				.collect(Collectors.toMap(RestorePointInfo::getEarnPointNo, RestorePointInfo::getDeductPoint));
-		final var earnPoints = earnPointReader.findAllByIds(earnPointNos);
+		final List<RestoredPointInfo> restorePointList = new ArrayList<>();
+		final var deductPointMapByEarnPointNo = command.getDeductPointMapByEarnPointNo();
 		for (final EarnPoint earnPoint : earnPoints) {
-			final var restorePoint = deductPointMapByEarnPointNo.get(earnPoint.getEarnPointNo());
-			earnPoint.restorePoint(restorePoint);
+			final var restorePoint = deductPointMapByEarnPointNo.get(earnPoint.getEarnPointNo()); // 복구할 포인트 조회
+			final var restoredPoint = earnPoint.restorePoint(restorePoint); // 복구된 포인트 반환
+
+			// 응답할 결과 담아두기.
+			restorePointList.add(RestoredPointInfo.of(earnPoint.getEarnPointNo(), restoredPoint));
 		}
+		return RestorePointsResult.of(restorePointList);
 	}
 
 }

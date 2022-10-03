@@ -1,6 +1,8 @@
 package seolnavy.point.domain.earn;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +42,17 @@ public class EarnPointCommand {
 	public static class RestorePoint {
 
 		List<RestorePointInfo> restorePointInfos;
+
+		public List<Long> getEarnPointNos() {
+			return restorePointInfos.stream()
+					.map(RestorePointInfo::getEarnPointNo)
+					.collect(Collectors.toList());
+		}
+
+		public Map<Long, Long> getDeductPointMapByEarnPointNo() {
+			return restorePointInfos.stream()
+					.collect(Collectors.toMap(RestorePointInfo::getEarnPointNo, RestorePointInfo::getDeductPoint));
+		}
 	}
 
 	@Getter

@@ -84,8 +84,19 @@ public class EarnPoint extends BaseEntity<Long> {
 		return deductionPoints;
 	}
 
-	public void restorePoint(final Long restorePoint) {
+	/**
+	 * 포인트 복구
+	 * @param restorePoint 복구할 포인트
+	 * @return 복구한 포인트
+	 */
+	public long restorePoint(final Long restorePoint) {
 		this.remainPoint += restorePoint;
+
+		// 포인트가 복구되었지만, 유효기간이 만료되었다면 실질적인 포인트 복구 금액은 0원이다.
+		if (this.expirationYn.isTrue()) {
+			return 0L;
+		}
+		return restorePoint;
 	}
 
 	public static EarnPoint create(

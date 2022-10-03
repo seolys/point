@@ -1,6 +1,7 @@
 package seolnavy.point.domain.earn;
 
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,28 @@ public class EarnPointInfo {
 		private Long earnPointNo; // 적립포인트번호
 
 		private Long deductedPoint; // 차감된 포인트
+	}
+
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class RestorePointsResult {
+
+		private List<RestoredPointInfo> restorePointList;
+
+		public Long getRestoredPoint() {
+			return restorePointList.stream()
+					.map(RestoredPointInfo::getRestoredPoint)
+					.reduce(0L, Long::sum);
+		}
+	}
+
+	@Getter
+	@AllArgsConstructor(staticName = "of")
+	public static class RestoredPointInfo {
+
+		private Long earnPointNo; // 적립포인트번호
+
+		private Long restoredPoint; // 복원된 포인트
 	}
 
 }

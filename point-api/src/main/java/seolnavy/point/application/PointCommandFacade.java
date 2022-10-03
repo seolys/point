@@ -78,13 +78,13 @@ public class PointCommandFacade {
 
 		// 포인트 복구
 		final var restorePointCommand = CancelDeductPointCommandMapper.of(cancelDeductPointInfo);
-		earnPointService.restorePoints(restorePointCommand);
+		final var restorePointsResult = earnPointService.restorePoints(restorePointCommand);
 
 		// 히스토리 상태 변경
 		pointHistoryService.cancelDeductPoint(cancelDeductPointInfo.getDeductPointNo());
 
 		// 사용자 포인트 갱신
-		final var updatePointCommand = UpdatePoint.of(command.getUserNo(), cancelDeductPointInfo.getDeductPoint());
+		final var updatePointCommand = UpdatePoint.of(command.getUserNo(), restorePointsResult.getRestoredPoint());
 		userService.increaseUserPoint(updatePointCommand);
 	}
 
