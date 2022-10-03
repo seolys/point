@@ -69,6 +69,14 @@ public class DeductPoint extends BaseEntity<Long> {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deductPoint", cascade = CascadeType.PERSIST)
 	private List<DeductPointDetail> deductPointDetails = new ArrayList<>();
 
+	public void cancel() {
+		if (DeductPointStatus.DEDUCT_CANCEL == this.deductStatus) {
+			log.error("이미 취소된 상태입니다. deductPointNo={}", this.deductPointNo);
+			throw new PointsAlreadyCancelledException(this.deductPointNo);
+		}
+		this.deductStatus = DeductPointStatus.DEDUCT_CANCEL;
+	}
+
 	public static DeductPoint create(
 			@NonNull final String deductUuid,  // 차감 UUID
 			@NonNull final Long userNo,  // 회원번호
@@ -84,14 +92,6 @@ public class DeductPoint extends BaseEntity<Long> {
 
 	@Override public Long getId() {
 		return deductPointNo;
-	}
-
-	public void cancel() {
-		if (DeductPointStatus.DEDUCT_CANCEL == this.deductStatus) {
-			log.error("이미 취소된 상태입니다. deductPointNo={}", this.deductPointNo);
-			throw new PointsAlreadyCancelledException(this.deductPointNo);
-		}
-		this.deductStatus = DeductPointStatus.DEDUCT_CANCEL;
 	}
 
 }

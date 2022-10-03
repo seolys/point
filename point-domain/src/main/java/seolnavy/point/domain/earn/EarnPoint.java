@@ -73,6 +73,11 @@ public class EarnPoint extends BaseEntity<Long> {
 	 * @return 차감된 포인트
 	 */
 	public long deductPoint(final Long deductionPoints) {
+		// 유효기간이 만료되었다면 포인트 차감 불가
+		if (this.expirationYn.isTrue()) {
+			return 0L;
+		}
+
 		// 잔액이 차감금액보다 작으면, 잔액을 0원으로 만들고 기존 잔액을 반환.
 		if (this.remainPoint < deductionPoints) {
 			final long previousRemainPoint = this.remainPoint; // 이전 잔액 백업

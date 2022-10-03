@@ -18,6 +18,7 @@ import seolnavy.point.domain.deduct.exception.NotEnoughPointsException;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyDeductedException;
 import seolnavy.point.domain.earn.exception.PointsAlreadyEarnedException;
+import seolnavy.point.domain.user.exception.RemainPointsIsMinusException;
 
 @Slf4j
 @RestControllerAdvice
@@ -64,7 +65,7 @@ public class RestExceptionHandler {
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(NotEnoughPointsException.class)
+	@ExceptionHandler({NotEnoughPointsException.class, RemainPointsIsMinusException.class})
 	public CommonResponse<Void> notEnoughPointsException(final Exception e) {
 		log.warn(e.getMessage(), e);
 		return CommonResponse.of(NOT_ENOUGH_POINTS);

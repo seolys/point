@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import seolnavy.point.domain.BaseEntity;
+import seolnavy.point.domain.user.exception.RemainPointsIsMinusException;
 
 @Getter
 @Entity
@@ -41,6 +42,9 @@ public class User extends BaseEntity<Long> {
 
 	public void decreasePoint(final Long point) {
 		this.remainPoint -= point;
+		if (this.remainPoint < 0) {
+			throw new RemainPointsIsMinusException(userNo);
+		}
 	}
 
 	public static User create(

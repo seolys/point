@@ -49,6 +49,13 @@ public class PointHistory extends BaseEntity<Long> {
 	@Column(name = "POINT", nullable = false)
 	private Long point; // 포인트
 
+	/**
+	 * 포인트 차감 취소<br/>
+	 * - 사용취소된 내역은 존재하지 내역조회에서 제외해야 한다.<br/>
+	 * - 이를 위해 상태값(type)을 변경하거나, 취소여부 Flag값을 두거나, 차감취소 데이터를 INSERT 후 차감데이터와 매핑시키는 등의 전략을 취할 수 있다고 생각합니다.<br/>
+	 * - 개인적으로 차감취소 INSERT를 추가 적재하는것을 선호하나, 현 프로젝트에서는 차감내역의 상태를 차감취소로 변경하는 전략을 취했습니다.<br/>
+	 * - 실무 프로젝트에서는 사용취소 데이터 INSERT, 그리고 내역 조회를 QueryDSL 또는 jOOQ를 활용하여 개선할 것 같습니다.
+	 */
 	public void deductCancel() {
 		if (PointHistoryType.DEDUCT != historyType) {
 			log.error("포인트 차감 내역만 취소가 가능합니다. pointHistoryNo={}, historyType={}", pointHistoryNo, historyType);
@@ -76,4 +83,5 @@ public class PointHistory extends BaseEntity<Long> {
 	@Override public Long getId() {
 		return pointHistoryNo;
 	}
+
 }

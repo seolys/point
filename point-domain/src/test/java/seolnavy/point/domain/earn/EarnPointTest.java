@@ -2,11 +2,42 @@ package seolnavy.point.domain.earn;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import seolnavy.point.domain.UseYn;
 
 @DisplayName("적립 포인트")
 class EarnPointTest {
+
+	@Test
+	@DisplayName("적립 포인트 생성")
+	void create_success() {
+		final var earnUuid = UUID.randomUUID().toString();
+		final var userNo = 1L;
+		final var point = 1000L;
+
+		final var earnPoint = EarnPoint.create(earnUuid, userNo, point);
+
+		assertThat(earnPoint.getEarnUuid()).isEqualTo(earnUuid);
+		assertThat(earnPoint.getUserNo()).isEqualTo(userNo);
+		assertThat(earnPoint.getEarnPoint()).isEqualTo(point);
+		assertThat(earnPoint.getRemainPoint()).isEqualTo(point);
+		assertThat(earnPoint.getExpirationYn()).isEqualTo(UseYn.N);
+		assertThat(earnPoint.getExpirationDate()).isEqualTo(LocalDate.now().plusYears(1));
+	}
+
+	@Test
+	@DisplayName("포인트 차감 - 만료된 포인트에 차감요청")
+	void deductPoint_expiration_fail() {
+		final var earnPoint = EarnPoint.entityBuilder()
+				.remainPoint(10_000L)
+				.expirationYn(UseYn.Y)
+				.build();
+
+		assertThat(earnPoint.deductPoint(3_000L)).isEqualTo(0L);
+	}
 
 	@Test
 	@DisplayName("포인트 차감 - 잔여포인트가 차감할 포인트보다 많음.")
