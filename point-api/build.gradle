@@ -1,8 +1,6 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
 
     // module (rootProject.settings.gradle include와 매칭)
     implementation project(':point-domain')
