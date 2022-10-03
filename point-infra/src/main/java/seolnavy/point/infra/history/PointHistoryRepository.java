@@ -13,4 +13,6 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Long
 	Stream<PointHistory> findAllByUserNoAndHistoryTypeInOrderByCreatedDateDesc(Long userNo, Collection<PointHistoryType> pointHistoryTypes, Pageable pageable);
 
 	Optional<PointHistory> findByDeductPointNo(Long deductPointNo);
+
+	Optional<PointHistory> findByEarnPointNo(Long earnPointNo);
 }

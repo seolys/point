@@ -32,7 +32,7 @@ public class PointCommandFacade {
 	private final DeductPointValidator deductPointValidator;
 
 	@Transactional
-	public void earnPoint(final RegisterPoint command) {
+	public EarnPointInfo.Main earnPoint(final RegisterPoint command) {
 		// 포인트 적립
 		final EarnPointInfo.Main earnedPointInfo;
 		earnedPointInfo = earnPointService.registerEarnPoint(command);
@@ -45,6 +45,8 @@ public class PointCommandFacade {
 		// 사용자 포인트 갱신
 		final var updateUserPointCommand = UpdatePoint.of(command.getUserNo(), earnedPointInfo.getEarnPoint());
 		userService.increaseUserPoint(updateUserPointCommand);
+
+		return earnedPointInfo;
 	}
 
 	@Transactional
