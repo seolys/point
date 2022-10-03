@@ -1,5 +1,7 @@
 package seolnavy.point.interfaces.controller;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +34,7 @@ public class PointCommandController {
 	 * @return
 	 */
 	@PostMapping("/{userNo}/earn")
-	public CommonResponse<Void> earnPoint(@PathVariable("userNo") final long userNo, @RequestBody final EarnPointDto.Request request) {
+	public CommonResponse<Void> earnPoint(@PathVariable("userNo") final long userNo, @RequestBody @NotNull @Valid final EarnPointDto.Request request) {
 		final var command = EarnPointDtoMapper.of(userNo, request);
 		pointCommandFacade.earnPoint(command);
 		return CommonResponse.of(ResponseCode.SUCCESS);
@@ -45,7 +47,10 @@ public class PointCommandController {
 	 * @return
 	 */
 	@PostMapping("/{userNo}/deduct")
-	public CommonResponse<DeductPointDto.Response> deductPoint(@PathVariable("userNo") final long userNo, @RequestBody final DeductPointDto.Request request) {
+	public CommonResponse<DeductPointDto.Response> deductPoint(
+			@PathVariable("userNo") final long userNo,
+			@RequestBody @NotNull @Valid final DeductPointDto.Request request
+	) {
 		final var command = DeductPointDtoMapper.of(userNo, request);
 
 		final var deductPointInfo = pointCommandFacade.deductPoint(command);
@@ -54,8 +59,17 @@ public class PointCommandController {
 		return CommonResponse.of(response);
 	}
 
+	/**
+	 * 회원별 포인트 사용 취소
+	 * @param userNo
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/{userNo}/cancel-deduct")
-	public CommonResponse<Void> cancelDeductPoint(@PathVariable("userNo") final long userNo, @RequestBody final CancelDeductPointDto.Request request) {
+	public CommonResponse<Void> cancelDeductPoint(
+			@PathVariable("userNo") final long userNo,
+			@RequestBody final CancelDeductPointDto.Request request
+	) {
 		final var command = CancelDeductPointDtoMapper.of(userNo, request);
 		pointCommandFacade.cancelDeductPoint(command);
 		return CommonResponse.of(ResponseCode.SUCCESS);

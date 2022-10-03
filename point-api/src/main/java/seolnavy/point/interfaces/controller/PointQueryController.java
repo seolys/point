@@ -2,6 +2,7 @@ package seolnavy.point.interfaces.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,10 @@ public class PointQueryController {
 	 * @return
 	 */
 	@GetMapping("/{userNo}/history")
-	public CommonResponse<GetUserPointHistoryDto.Response> getUserPointHistory(@PathVariable("userNo") final long userNo, final Pageable pageable) {
+	public CommonResponse<GetUserPointHistoryDto.Response> getUserPointHistory(
+			@PathVariable("userNo") final long userNo,
+			@PageableDefault final Pageable pageable
+	) {
 		final var userPointHistory = pointQueryFacade.getUserPointHistory(userNo, pageable);
 		final var response = GetUserPointHistoryDtoMapper.of(userPointHistory);
 		return CommonResponse.of(response);

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import seolnavy.point.common.response.CommonResponse;
 import seolnavy.point.domain.deduct.exception.NotEnoughPointsException;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyDeductedException;
@@ -38,7 +39,7 @@ public class RestExceptionHandler {
 	 */
 	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({IllegalArgumentException.class, BindException.class})
+	@ExceptionHandler({IllegalArgumentException.class, BindException.class, MethodArgumentTypeMismatchException.class})
 	public CommonResponse<Void> handleIllegalArgumentException(final Exception e) {
 		log.error("handleIllegalArgumentException: ", e);
 		return CommonResponse.of(INVALID_PARAMETER);

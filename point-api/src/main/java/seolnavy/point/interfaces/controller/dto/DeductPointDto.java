@@ -1,5 +1,7 @@
 package seolnavy.point.interfaces.controller.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +13,10 @@ public class DeductPointDto {
 	@Getter
 	public static class Request {
 
+		@NotBlank
 		private String uuid; // 차감 UUID
 
+		@NotNull
 		private Long point; // 포인트
 	}
 
