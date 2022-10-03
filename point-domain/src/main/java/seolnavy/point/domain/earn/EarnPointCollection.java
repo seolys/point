@@ -16,8 +16,8 @@ public class EarnPointCollection {
 
 	public List<DeductPointResult> deductPoints(final Long deductPoint) {
 		if (earnPointList.isEmpty()) {
-			log.warn("가용 포인트가 없습니다. userNo: {}", userNo);
-			throw new NotEnoughPointsException();
+			log.warn("가용 포인트가 없습니다. userNo={}", userNo);
+			throw new NotEnoughPointsException(userNo);
 		}
 
 		// 순차적으로 차감한다.
@@ -41,8 +41,8 @@ public class EarnPointCollection {
 
 		// 전부 차감했는데도 차감할 금액이 남아있다면 오류
 		if (remainingDeductionPoints > 0L) {
-			log.warn("가용 포인트가 부족합니다. userNo: {}, deductPoint: {}, remainingDeductionPoints: {}", userNo, deductPoint, remainingDeductionPoints);
-			throw new NotEnoughPointsException();
+			log.warn("가용 포인트가 부족합니다. userNo={}, deductPoint={}, remainingDeductionPoints={}", userNo, deductPoint, remainingDeductionPoints);
+			throw new NotEnoughPointsException(userNo, remainingDeductionPoints, deductPoint);
 		}
 
 		return deductedPointResults;

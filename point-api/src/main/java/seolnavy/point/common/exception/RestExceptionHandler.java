@@ -2,7 +2,6 @@ package seolnavy.point.common.exception;
 
 import static seolnavy.point.common.response.ResponseCode.INVALID_PARAMETER;
 import static seolnavy.point.common.response.ResponseCode.NOT_ENOUGH_POINTS;
-import static seolnavy.point.common.response.ResponseCode.POINTS_ALREADY_DEDUCTED;
 import static seolnavy.point.common.response.ResponseCode.POINTS_ALREADY_EARNED;
 import static seolnavy.point.common.response.ResponseCode.SYSTEM_ERROR;
 
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import seolnavy.point.common.response.CommonResponse;
 import seolnavy.point.domain.deduct.exception.NotEnoughPointsException;
+import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyDeductedException;
 import seolnavy.point.domain.earn.exception.PointsAlreadyEarnedException;
 
@@ -30,7 +30,7 @@ public class RestExceptionHandler {
 	@ResponseStatus(HttpStatus.OK)
 	@ExceptionHandler(CustomException.class)
 	public CommonResponse<Void> handleCustomException(final CustomException e) {
-		log.error("handleCustomException: ", e);
+		log.error(e.getMessage(), e);
 		return CommonResponse.of(e.getErrorCode(), e.getErrorMessage());
 	}
 
@@ -41,7 +41,7 @@ public class RestExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({IllegalArgumentException.class, BindException.class, MethodArgumentTypeMismatchException.class})
 	public CommonResponse<Void> handleIllegalArgumentException(final Exception e) {
-		log.error("handleIllegalArgumentException: ", e);
+		log.error(e.getMessage(), e);
 		return CommonResponse.of(INVALID_PARAMETER);
 	}
 
@@ -52,29 +52,22 @@ public class RestExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public CommonResponse<Void> handleException(final Exception e) {
-		log.error("handleException: ", e);
+		log.error(e.getMessage(), e);
 		return CommonResponse.of(SYSTEM_ERROR);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(PointsAlreadyEarnedException.class)
-	public CommonResponse<Void> pointsAlreadyEarnedException(final Exception e) {
-		log.warn(POINTS_ALREADY_EARNED.getMessage(), e);
+	@ExceptionHandler({PointsAlreadyEarnedException.class, PointsAlreadyCancelledException.class, PointsAlreadyDeductedException.class})
+	public CommonResponse<Void> duplicateRequestException(final Exception e) {
+		log.warn(e.getMessage(), e);
 		return CommonResponse.of(POINTS_ALREADY_EARNED);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NotEnoughPointsException.class)
 	public CommonResponse<Void> notEnoughPointsException(final Exception e) {
-		log.warn(NOT_ENOUGH_POINTS.getMessage(), e);
+		log.warn(e.getMessage(), e);
 		return CommonResponse.of(NOT_ENOUGH_POINTS);
-	}
-
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(PointsAlreadyDeductedException.class)
-	public CommonResponse<Void> pointsAlreadyDeductedException(final Exception e) {
-		log.warn(POINTS_ALREADY_DEDUCTED.getMessage(), e);
-		return CommonResponse.of(POINTS_ALREADY_DEDUCTED);
 	}
 
 }

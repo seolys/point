@@ -30,16 +30,16 @@ public class EarnPointServiceImpl implements EarnPointService {
 	public Main registerEarnPoint(final RegisterPoint command) {
 		final var exists = earnPointReader.existsByEarnUuid(command.getEarnUuid());
 		if (exists) {
-			log.warn("이미 등록된 포인트입니다. earnUuid: {}", command.getEarnUuid());
-			throw new PointsAlreadyEarnedException();
+			log.warn("이미 등록된 포인트입니다. earnUuid={}", command.getEarnUuid());
+			throw new PointsAlreadyEarnedException(command.getEarnUuid());
 		}
 
 		try {
 			final var saveEarnPoint = earnPointStore.save(command.toEntity());
 			return EarnPointInfo.Main.of(saveEarnPoint);
 		} catch (final ConstraintViolationException e) {
-			log.warn("이미 등록된 포인트입니다. earnUuid: {}", command.getEarnUuid());
-			throw new PointsAlreadyEarnedException(e);
+			log.warn("이미 등록된 포인트입니다. earnUuid={}", command.getEarnUuid());
+			throw new PointsAlreadyEarnedException(command.getEarnUuid(), e);
 		}
 	}
 

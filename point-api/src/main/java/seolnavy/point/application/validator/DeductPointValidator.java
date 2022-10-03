@@ -22,14 +22,14 @@ public class DeductPointValidator {
 		final var exists = deductPointService.existsByDeductUuid(command.getDeductUuid());
 		if (exists) {
 			log.warn("이미 등록된 차감입니다. deductUuid={}", command.getDeductUuid());
-			throw new PointsAlreadyDeductedException();
+			throw new PointsAlreadyDeductedException(command.getDeductUuid());
 		}
 
 		// 잔액 확인
 		final var remainPoint = userService.getRemainPoint(command.getUserNo());
 		if (remainPoint - command.getDeductPoint() < 0) {
-			log.warn("가용 포인트가 부족합니다. userNo: {}, remainPoint: {}, deductPoint: {}", command.getUserNo(), remainPoint, command.getDeductPoint());
-			throw new NotEnoughPointsException();
+			log.warn("가용 포인트가 부족합니다. userNo={}, remainPoint={}, deductPoint={}", command.getUserNo(), remainPoint, command.getDeductPoint());
+			throw new NotEnoughPointsException(command.getUserNo(), remainPoint, command.getDeductPoint());
 		}
 	}
 }

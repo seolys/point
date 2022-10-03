@@ -88,8 +88,8 @@ public class DeductPoint extends BaseEntity<Long> {
 
 	public void cancel() {
 		if (DeductPointStatus.DEDUCT_CANCEL == this.deductStatus) {
-			log.error("이미 취소된 포인트 차감입니다. deductPointNo: {}", this.deductPointNo);
-			throw new PointsAlreadyCancelledException();
+			log.error("이미 취소된 상태입니다. deductPointNo={}", this.deductPointNo);
+			throw new PointsAlreadyCancelledException(this.deductPointNo);
 		}
 		this.deductStatus = DeductPointStatus.DEDUCT_CANCEL;
 	}
