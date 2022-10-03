@@ -13,6 +13,7 @@ import seolnavy.point.domain.history.PointHistoryType;
 public class GetUserPointHistoryDto {
 
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(staticName = "of")
 	public static class Response {
 
@@ -21,30 +22,30 @@ public class GetUserPointHistoryDto {
 	}
 
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(staticName = "of")
 	public static class PointHistoryDetail {
 
 		private Long pointHistoryNo; // 포인트내역번호
 		private PointHistoryResponseType historyType; // 내역구분
-
 		private Long point; // 포인트
-
-		private LocalDateTime createdDate;
+		private LocalDateTime createdDate; // 등록일자
 	}
 
 	@Getter
 	@AllArgsConstructor
 	public enum PointHistoryResponseType {
 		/** 적립 */
-		EARN(PointHistoryType.EARN),
+		EARN(PointHistoryType.EARN, "적립"),
 		/** 차감 */
-		DEDUCT(PointHistoryType.DEDUCT),
+		DEDUCT(PointHistoryType.DEDUCT, "사용"),
 		/** 차감 취소 */
-		DEDUCT_CANCEL(PointHistoryType.DEDUCT_CANCEL),
+		DEDUCT_CANCEL(PointHistoryType.DEDUCT_CANCEL, "사용 취소"),
 		/** 만료 */
-		EXPIRE(PointHistoryType.EXPIRE);
+		EXPIRE(PointHistoryType.EXPIRE, "만료");
 
 		private final PointHistoryType pointHistoryType;
+		private final String description;
 
 		public static PointHistoryResponseType of(final PointHistoryType pointHistoryType) {
 			if (Objects.isNull(pointHistoryType)) {

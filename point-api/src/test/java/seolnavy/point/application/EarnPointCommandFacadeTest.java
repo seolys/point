@@ -17,7 +17,7 @@ import seolnavy.point.infra.earn.EarnPointRepository;
 import seolnavy.point.infra.history.PointHistoryRepository;
 import seolnavy.point.infra.user.UserRedisRepository;
 import seolnavy.point.infra.user.UserRepository;
-import seolnavy.point.util.UnitTestUtils;
+import seolnavy.point.util.TestTransactionUtils;
 
 @Transactional
 @SpringBootTest
@@ -31,23 +31,27 @@ class EarnPointCommandFacadeTest {
 	@Autowired private UserRedisRepository userRedisRepository;
 	@Autowired private PointHistoryRepository pointHistoryRepository;
 
+	@Autowired private PointTestSupport pointTestSupport;
+
+
 	@Test
 	@DisplayName("포인트 적립")
 	void earnPoint_success() {
 		// given
-		final var earnUuid = UUID.randomUUID().toString();
 		final var userNo = 1L;
-		final var earnPoint = 2000L;
-		final var command = RegisterPoint.of(earnUuid, userNo, earnPoint);
+		long currentUserRemainPoint = pointTestSupport.findUserRemainPoint(userNo);
+
+		final var command = RegisterPoint.of(UUID.randomUUID().toString(), userNo, 2000L);
 
 		// when
 		final var earnPointInfo = pointCommandFacade.earnPoint(command);
-		UnitTestUtils.endTransaction(); // @TransactionalEventListener 의 동작까지 수행시킨다.
+		currentUserRemainPoint += command.getEarnPoint();
+		TestTransactionUtils.end();
 
 		// then
 		checkEarnPointInfo(command, earnPointInfo);
 		checkEarnPointEntity(command, earnPointInfo.getEarnPointNo());
-		checkUserRemainPoint(userNo, earnPoint);
+		checkUserRemainPoint(command.getUserNo(), currentUserRemainPoint);
 		checkPointHistory(command, earnPointInfo.getEarnPointNo());
 	}
 
@@ -57,11 +61,11 @@ class EarnPointCommandFacadeTest {
 		assertThat(pointHistory.getPoint()).isEqualTo(command.getEarnPoint());
 	}
 
-	private void checkUserRemainPoint(final long userNo, final long remainPoint) {
-		final var findUser = userRepository.findById(userNo).get();
-		final var findUserRemainPoint = userRedisRepository.getUserRemainPoint(userNo).get();
-		assertThat(findUser.getRemainPoint()).isEqualTo(remainPoint);
-		assertThat(findUserRemainPoint).isEqualTo(remainPoint);
+	private void checkUserRemainPoint(final Long userNo, final long currentUserRemainPoint) {
+		final var rdbmsRemainPoint = userRepository.findById(userNo).get().getRemainPoint();
+		final var redisRemainPoint = userRedisRepository.getUserRemainPoint(userNo).get();
+		assertThat(rdbmsRemainPoint).isEqualTo(currentUserRemainPoint);
+		assertThat(redisRemainPoint).isEqualTo(currentUserRemainPoint);
 	}
 
 	private void checkEarnPointEntity(final RegisterPoint command, final Long earnPointNo) {

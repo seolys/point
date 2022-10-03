@@ -1,0 +1,26 @@
+[[overview]]
+== Overview
+
+[[overview-http-status-codes]]
+=== HTTP Status Codes
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| Successfully
+
+| `400 Bad Request`
+| Bad Request
+
+| `500 Internal Server Error`
+| Server Error
+|===
+
+[[overview-error-response]]
+=== HTTP Error Response
+
+operation::common-docs-document/bad-reqeust[snippets='http-response,response-fields']
+
+operation::common-docs-document/internal-server-error[snippets='http-response,response-fields']
+

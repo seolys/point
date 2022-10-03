@@ -7,11 +7,13 @@ import seolnavy.point.domain.deduct.DeductPointCommand.DeductPointRequest;
 import seolnavy.point.domain.deduct.DeductPointInfo.Main;
 import seolnavy.point.domain.earn.EarnPointCommand.RegisterPoint;
 import seolnavy.point.domain.earn.EarnPointInfo;
+import seolnavy.point.domain.user.UserService;
 
 @Component
-public class PointCommandTestSupport {
+public class PointTestSupport {
 
 	@Autowired private PointCommandFacade pointCommandFacade;
+	@Autowired private UserService userService;
 
 	public EarnPointInfo.Main earnPoint(final Long userNo, final Long earnPoint) {
 		final var earnUuid = UUID.randomUUID().toString();
@@ -23,6 +25,10 @@ public class PointCommandTestSupport {
 		final var deductUuid = UUID.randomUUID().toString();
 		final var command = DeductPointRequest.of(deductUuid, userNo, deductPoint);
 		return pointCommandFacade.deductPoint(command);
+	}
+
+	public Long findUserRemainPoint(final long userNo) {
+		return userService.getRemainPoint(userNo);
 	}
 
 }

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 public class DeductPointDto {
 
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@AllArgsConstructor(staticName = "of")
 	public static class Request {
 
 		@NotBlank
@@ -21,6 +23,7 @@ public class DeductPointDto {
 	}
 
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(staticName = "of")
 	public static class Response {
 

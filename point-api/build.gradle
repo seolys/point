@@ -2,8 +2,46 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.retry:spring-retry'
-    
+
+    asciidoctorExtension 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     // module (rootProject.settings.gradle include와 매칭)
     implementation project(':point-domain')
     implementation project(':point-infra')
 }
+
+// Spring restDocs 시작
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+asciidoctor {
+    configurations 'asciidoctorExtension'
+    inputs.dir snippetsDir
+    baseDirFollowsSourceFile()
+    dependsOn test
+}
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+task copyHTMLDocument(type: Copy) {
+    dependsOn asciidoctor
+    from "${asciidoctor.outputDir}"
+    into "src/main/resources/static/docs"
+}
+
+build {
+    dependsOn bootJar
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
+}
+// Spring restDocs 끝

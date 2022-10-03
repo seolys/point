@@ -1,0 +1,26 @@
+// 템플릿
+//operation::member-controller-test/member_get[snippets='http-request,path-parameters,http-response,response-fields']
+
+= 포인트 시스템 REST Docs
+설연수;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+include::overview.adoc[]
+
+include::code.adoc[]
+
+include::point-query-API.adoc[]
+
+include::point-command-API.adoc[]
+
+
+
+
+
+
+

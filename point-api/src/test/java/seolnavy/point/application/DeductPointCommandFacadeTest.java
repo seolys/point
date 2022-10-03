@@ -3,6 +3,7 @@ package seolnavy.point.application;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import seolnavy.point.infra.deduct.DeductPointRepository;
 import seolnavy.point.infra.history.PointHistoryRepository;
 import seolnavy.point.infra.user.UserRedisRepository;
 import seolnavy.point.infra.user.UserRepository;
-import seolnavy.point.util.UnitTestUtils;
+import seolnavy.point.util.TestTransactionUtils;
 
 @Transactional
 @SpringBootTest
@@ -29,7 +30,7 @@ class DeductPointCommandFacadeTest {
 	@Autowired private UserRedisRepository userRedisRepository;
 	@Autowired private PointHistoryRepository pointHistoryRepository;
 
-	@Autowired private PointCommandTestSupport pointCommandTestSupport;
+	@Autowired private PointTestSupport pointTestSupport;
 
 	@Test
 	@DisplayName("포인트 차감")
@@ -37,31 +38,40 @@ class DeductPointCommandFacadeTest {
 		// given
 		final var userNo = 1L;
 		final var point = 1000L;
-		pointCommandTestSupport.earnPoint(userNo, point);
+
+		// 현재포인트 조회
+		final var currentUserRemainPoint = new AtomicLong(pointTestSupport.findUserRemainPoint(userNo));
+		earnPoint(userNo, point, currentUserRemainPoint);
 
 		final var deductUuid = UUID.randomUUID().toString();
 		final var command = DeductPointRequest.of(deductUuid, userNo, point);
 
 		// when
 		final var deductPointInfo = pointCommandFacade.deductPoint(command);
-		UnitTestUtils.endTransaction(); // @TransactionalEventListener 의 동작까지 수행시킨다.
+		currentUserRemainPoint.addAndGet(-point);
 
 		// then
+		TestTransactionUtils.end();
 		checkDeductPointInfo(command, deductPointInfo.getDeductPointNo());
-		checkUserRemainPoint(userNo, point - command.getDeductPoint());
+		checkUserRemainPoint(userNo, currentUserRemainPoint.get());
 		checkPointHistory(command, deductPointInfo.getDeductPointNo());
 	}
+
+	private void earnPoint(final long userNo, final long point, final AtomicLong currentUserRemainPoint) {
+		pointTestSupport.earnPoint(userNo, point); // 포인트 증가
+		currentUserRemainPoint.addAndGet(point);
+	}
+
 
 	@Test
 	@DisplayName("포인트 차감 실패 - 차감할 포인트가 남은 포인트보다 큰 경우")
 	void deductPoint_fail() {
 		// given
-		final var userNo = 2L;
-		final var point = 1000L;
-		pointCommandTestSupport.earnPoint(userNo, point);
+		final var userNo = 1L;
 
-		final var deductUuid = UUID.randomUUID().toString();
-		final var command = DeductPointRequest.of(deductUuid, userNo, point + 500);
+		// when
+		final var command = DeductPointRequest.of(
+				UUID.randomUUID().toString(), userNo, Long.MAX_VALUE);
 
 		// when
 		assertThatThrownBy(() -> pointCommandFacade.deductPoint(command))
@@ -74,11 +84,11 @@ class DeductPointCommandFacadeTest {
 		assertThat(pointHistory.getPoint()).isEqualTo(command.getDeductPoint());
 	}
 
-	private void checkUserRemainPoint(final long userNo, final long remainPoint) {
+	private void checkUserRemainPoint(final long userNo, final long currentUserRemainPoint) {
 		final var findUser = userRepository.findById(userNo).get();
 		final var findUserRemainPoint = userRedisRepository.getUserRemainPoint(userNo).get();
-		assertThat(findUser.getRemainPoint()).isEqualTo(remainPoint);
-		assertThat(findUserRemainPoint).isEqualTo(remainPoint);
+		assertThat(findUser.getRemainPoint()).isEqualTo(currentUserRemainPoint);
+		assertThat(findUserRemainPoint).isEqualTo(currentUserRemainPoint);
 	}
 
 	private void checkDeductPointInfo(final DeductPointRequest command, final Long deductPointNo) {

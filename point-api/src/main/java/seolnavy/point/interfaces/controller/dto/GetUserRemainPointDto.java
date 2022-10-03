@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class GetUserRemainPointDto {
 
 	@Getter
+	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	@AllArgsConstructor(staticName = "of")
 	public static class Response {
 

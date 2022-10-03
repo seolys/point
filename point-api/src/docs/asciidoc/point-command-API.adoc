@@ -1,0 +1,18 @@
+[[Point-Command-API]]
+== 회원별 포인트 적립, 사용, 사용취소
+
+[[회원별-포인트-적립]]
+=== 회원별 포인트 적립
+
+operation::point-command-controller-test/earn-point[snippets='path-parameters,http-request,http-response,response-fields']
+
+[[회원별-포인트-사용]]
+=== 회원별 포인트 사용
+
+operation::point-command-controller-test/deduct-point[snippets='path-parameters,http-request,http-response,response-fields']
+
+[[회원별-포인트-사용-취소]]
+=== 회원별 포인트 사용 취소
+
+operation::point-command-controller-test/cancel-deduct-point[snippets='path-parameters,http-request,http-response,response-fields']
+
