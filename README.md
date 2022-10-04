@@ -1,6 +1,6 @@
 # 프로젝트 실행 및 API 호출
 
-## 서버 실행하기
+## gradle 서버 실행
 
 ```shell
 # 실행
@@ -11,17 +11,18 @@
 java -jar ./point-api/build/libs/point-api-*.jar 
 ```
 
-## jar 다운로드 및 실행
+## jar 다운로드 및 서버 실행
 
 - [jar 다운로드](https://github.com/seolys/point/blob/main/point-api.jar)
-
-```shell
-java -jar ./point-api/build/libs/point-api-*.jar
-```
+- 다운받은 jar 실행
+  ```shell
+  java -jar point-api.jar
+  ```
 
 ## API 호출
 
-- http-test의 .http 파일 또는 [Spring Rest Docs(서버 실행 후 클릭)](http://localhost:8500/docs/index.html)를 참고해주세요.
+- http-test 디렉토리의 .http 파일 또는 [Spring Rest Docs(서버 실행 후 클릭)](http://localhost:8500/docs/index.html)를 참고해주세요.
+- README.md 하단에 API별 curl 정보도 첨부하였습니다.
 
 # 프로젝트 설명
 
