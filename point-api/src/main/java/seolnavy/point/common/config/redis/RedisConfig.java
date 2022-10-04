@@ -9,6 +9,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -29,23 +30,13 @@ public class RedisConfig {
 		return new LettuceConnectionFactory(redisConfig);
 	}
 
-//	@Bean
-//	public RedisTemplate<String, Object> redisTemplate() {
-//		final RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-//		final RedisTemplate<String, Object> template = new RedisTemplate<>();
-//		template.setConnectionFactory(redisConnectionFactory());
-//		template.setKeySerializer(stringSerializer);
-//		template.setValueSerializer(stringSerializer);
-//		return template;
-//	}
-
 	@Bean
-	public RedisTemplate<String, Long> remainPointRedisTemplate() {
+	public RedisTemplate<String, Integer> remainPointRedisTemplate() {
 		final RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-		final RedisTemplate<String, Long> template = new RedisTemplate<>();
+		final RedisTemplate<String, Integer> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory());
 		template.setKeySerializer(stringSerializer);
-//		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		return template;
 	}
 }

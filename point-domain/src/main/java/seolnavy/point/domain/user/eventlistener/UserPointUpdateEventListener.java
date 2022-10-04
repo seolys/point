@@ -13,7 +13,7 @@ public class UserPointUpdateEventListener {
 
 	@TransactionalEventListener
 	public void userPointUpdateEventListener(final UserPointUpdateEvent event) {
-		userStore.setUserPointToCache(event.getUserNo(), event.getRemainPoint());
+		userStore.increaseUserPoint(event.getUserNo(), event.getIncreasePoint());
 	}
 
 }

@@ -16,8 +16,8 @@ public class UserStoreImpl implements UserStore {
 		return userRepository.save(user);
 	}
 
-	@Override public void setUserPointToCache(final Long userNo, final Long remainPoint) {
-		userRedisRepository.saveRemainPoint(userNo, remainPoint);
+	@Override public void increaseUserPoint(final Long userNo, final Long increasePoint) {
+		userRedisRepository.increaseUserPoint(userNo, increasePoint);
 	}
 
 }

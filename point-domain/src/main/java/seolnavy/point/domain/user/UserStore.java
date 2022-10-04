@@ -4,6 +4,6 @@ public interface UserStore {
 
 	User save(User user);
 
-	void setUserPointToCache(Long userNo, Long remainPoint);
+	void increaseUserPoint(Long userNo, Long remainPoint);
 
 }

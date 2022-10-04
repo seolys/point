@@ -30,13 +30,13 @@ public class UserServiceImpl implements UserService {
 		final var userOptional = userReader.findUserById(command.getUserNo());
 		if (userOptional.isEmpty()) {
 			final var savedUser = userStore.save(command.toEntity());
-			publishUpdatePointEvent(savedUser);
+			publishUpdatePointEvent(command.getUserNo(), command.getPoint());
 			return UserInfo.Main.of(savedUser);
 		}
 
 		final var findUser = userOptional.get();
 		findUser.increasePoint(command.getPoint());
-		publishUpdatePointEvent(findUser);
+		publishUpdatePointEvent(command.getUserNo(), command.getPoint());
 		return UserInfo.Main.of(findUser);
 	}
 
@@ -44,13 +44,13 @@ public class UserServiceImpl implements UserService {
 	@Override public Main decreaseUserPoint(final UpdatePoint command) {
 		final var findUser = userReader.findUserById(command.getUserNo()).orElseThrow(EntityNotFoundException::new);
 		findUser.decreasePoint(command.getPoint());
-		publishUpdatePointEvent(findUser);
+		publishUpdatePointEvent(command.getUserNo(), -command.getPoint());
 		return UserInfo.Main.of(findUser);
 	}
 
-	private void publishUpdatePointEvent(final User findUser) {
+	private void publishUpdatePointEvent(final Long userNo, final Long point) {
 		// 사용자 포인트 갱신 이벤트 발행
-		applicationEventPublisher.publishEvent(UserPointUpdateEvent.of(findUser));
+		applicationEventPublisher.publishEvent(UserPointUpdateEvent.of(userNo, point));
 	}
 
 }

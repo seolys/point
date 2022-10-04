@@ -25,7 +25,7 @@ public class UserReaderImpl implements UserReader {
 		final var remainPoint = userRepository.findById(userNo)
 				.map(User::getRemainPoint)
 				.orElse(0L);
-		redisRepository.saveRemainPoint(userNo, remainPoint);
+		redisRepository.setUserPoint(userNo, remainPoint);
 		return remainPoint;
 	}
 
