@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @SpringBootTest
-@DisplayName("포인트 조회 Facade 테스트")
+@DisplayName("[Facade] 포인트 조회 테스트")
 class PointQueryFacadeTest {
 
 	@Autowired private PointQueryFacade pointQueryFacade;

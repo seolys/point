@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import seolnavy.point.restdocs.ControllerTestSupport;
 
-@DisplayName("공통 응답코드")
+@DisplayName("[Rest Docs] 공통 응답코드")
 public class CommonDocsDocument extends ControllerTestSupport {
 
 	@Test

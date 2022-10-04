@@ -24,7 +24,7 @@ import seolnavy.point.interfaces.controller.dto.GetUserPointHistoryDto;
 import seolnavy.point.interfaces.controller.dto.GetUserRemainPointDto;
 import seolnavy.point.restdocs.ControllerTestSupport;
 
-@DisplayName("포인트 Query Controller")
+@DisplayName("[Controller] 포인트 Query")
 class PointQueryControllerTest extends ControllerTestSupport {
 
 	@Autowired private UserService userService;
@@ -85,10 +85,10 @@ class PointQueryControllerTest extends ControllerTestSupport {
 								responseFields(
 										CODE,
 										MESSAGE,
-										fieldWithPath("data.history[0].pointHistoryNo").description("포인트내역번호"),
-										fieldWithPath("data.history[0].historyType").description("내역구분"),
-										fieldWithPath("data.history[0].point").description("포인트"),
-										fieldWithPath("data.history[0].createdDate").description("등록일자").attributes(field("format", "2022-10-03T22:05:01.106881"))
+										fieldWithPath("data.history[].pointHistoryNo").description("포인트내역번호"),
+										fieldWithPath("data.history[].historyType").description("내역구분"),
+										fieldWithPath("data.history[].point").description("포인트"),
+										fieldWithPath("data.history[].createdDate").description("등록일자").attributes(field("format", "2022-10-03T22:05:01.106881"))
 								)
 						)
 				);

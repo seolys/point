@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import seolnavy.point.restdocs.ControllerTestSupport;
 
-@DisplayName("공통코드")
+@DisplayName("[Rest Docs] 공통코드")
 public class CommonCodeDocument extends ControllerTestSupport {
 
 	@Test
-	@DisplayName("상태코드")
+	@DisplayName("포인트 내역 구분코드")
 	void rowStsCd() throws Exception {
 		mockMvc.perform(
 						get("/test/common/pointHistoryResponseType")

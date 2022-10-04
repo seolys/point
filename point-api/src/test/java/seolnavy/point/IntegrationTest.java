@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import seolnavy.point.application.PointCommandFacade;
-import seolnavy.point.application.PointQueryFacade;
 import seolnavy.point.application.PointTestSupport;
 import seolnavy.point.domain.deduct.DeductPointCommand.CancelDeductPoint;
 import seolnavy.point.domain.deduct.DeductPointCommand.DeductPointRequest;
@@ -20,16 +19,16 @@ import seolnavy.point.util.TestTransactionUtils;
 
 @Transactional
 @SpringBootTest
-@DisplayName("포인트 통합 테스트")
+@DisplayName("[Integration] 포인트 테스트")
 public class IntegrationTest {
 
 	@Autowired private PointCommandFacade pointCommandFacade;
-	@Autowired private PointQueryFacade pointQueryFacade;
 	@Autowired private PointTestSupport pointTestSupport;
 
 	private final Long userNo = 1L;
 
 	@Test
+	@DisplayName("포인트 적립, 사용, 취소")
 	public void integration() {
 		// 현재 포인트 조회
 		Long expectedRemainPoint = pointTestSupport.findUserRemainPoint(userNo);
@@ -60,7 +59,7 @@ public class IntegrationTest {
 
 		userRemainPoint = pointTestSupport.findUserRemainPoint(userNo);
 		assertThat(userRemainPoint).isEqualTo(expectedRemainPoint);
-		
+
 		/* ============ <3. 사용취소> ============ */
 		// 포인트 19,000원 사용취소
 		final var cancelDeductPointRequest = CancelDeductPoint.of(userNo, deductPointInfo.getDeductPointNo());

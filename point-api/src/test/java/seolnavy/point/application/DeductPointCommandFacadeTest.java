@@ -20,7 +20,7 @@ import seolnavy.point.util.TestTransactionUtils;
 
 @Transactional
 @SpringBootTest
-@DisplayName("포인트 차감 Facade 테스트")
+@DisplayName("[Facade] 포인트 차감 테스트")
 class DeductPointCommandFacadeTest {
 
 	@Autowired private PointCommandFacade pointCommandFacade;

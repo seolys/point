@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import seolnavy.point.domain.UseYn;
 
-@DisplayName("적립 포인트")
+@DisplayName("[Domain] 포인트 적립")
 class EarnPointTest {
 
 	@Test
@@ -40,7 +40,7 @@ class EarnPointTest {
 	}
 
 	@Test
-	@DisplayName("포인트 차감 - 잔여포인트가 차감할 포인트보다 많음.")
+	@DisplayName("포인트 차감 - 잔여포인트가 차감할 포인트보다 많음")
 	void deductPoint_remainingPointsMoreThanDeductPoints_success() {
 		final var earnPoint = EarnPoint.entityBuilder().remainPoint(10_000L).build();
 
@@ -50,7 +50,7 @@ class EarnPointTest {
 	}
 
 	@Test
-	@DisplayName("포인트 차감 - 잔여포인트가 차감할 포인트보다 적음.")
+	@DisplayName("포인트 차감 - 잔여포인트가 차감할 포인트보다 적음")
 	void deductPoint_remainingPointsLessThanDeductPoints_success() {
 		final var earnPoint = EarnPoint.entityBuilder().remainPoint(3_000L).build();
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 
+@DisplayName("[Domain] 포인트 차감")
 class DeductPointTest {
 
 	@Test

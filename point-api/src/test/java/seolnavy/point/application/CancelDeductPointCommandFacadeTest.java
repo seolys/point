@@ -17,7 +17,7 @@ import seolnavy.point.util.TestTransactionUtils;
 
 @Transactional
 @SpringBootTest
-@DisplayName("포인트 차감 취소 Facade 테스트")
+@DisplayName("[Facade] 포인트 차감 취소 테스트")
 class CancelDeductPointCommandFacadeTest {
 
 	@Autowired private PointCommandFacade pointCommandFacade;

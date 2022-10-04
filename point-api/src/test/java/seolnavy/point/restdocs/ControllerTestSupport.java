@@ -1,5 +1,7 @@
 package seolnavy.point.restdocs;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.persistence.EntityManager;
@@ -8,10 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -39,7 +41,7 @@ public class ControllerTestSupport {
 			final RestDocumentationContextProvider provider
 	) {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-				.apply(MockMvcRestDocumentation.documentationConfiguration(provider))
+				.apply(documentationConfiguration(provider).uris().withPort(8500))
 				.alwaysDo(MockMvcResultHandlers.print())
 				.alwaysDo(restDocs)
 				.build();

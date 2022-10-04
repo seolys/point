@@ -26,7 +26,7 @@ import seolnavy.point.interfaces.controller.dto.DeductPointDto;
 import seolnavy.point.interfaces.controller.dto.EarnPointDto.Request;
 import seolnavy.point.restdocs.ControllerTestSupport;
 
-@DisplayName("포인트 Command Controller")
+@DisplayName("[Controller] 포인트 Command")
 class PointCommandControllerTest extends ControllerTestSupport {
 
 	@Autowired private UserService userService;
