@@ -11,6 +11,14 @@
 java -jar ./point-api/build/libs/point-api-*.jar 
 ```
 
+## jar 다운로드 및 실행
+
+- [jar 다운로드](https://github.com/seolys/point/blob/main/point-api.jar)
+
+```shell
+java -jar ./point-api/build/libs/point-api-*.jar
+```
+
 ## API 호출
 
 - http-test의 .http 파일 또는 [Spring Rest Docs(서버 실행 후 클릭)](http://localhost:8500/docs/index.html)를 참고해주세요.
