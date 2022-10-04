@@ -11,6 +11,10 @@ dependencies {
     implementation project(':point-infra')
 }
 
+jar {
+    enabled = false // plain jar 생성방지
+}
+
 // Spring restDocs 시작
 ext {
     snippetsDir = file('build/generated-snippets')
