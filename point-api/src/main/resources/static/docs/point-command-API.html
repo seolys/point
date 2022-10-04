@@ -474,10 +474,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/points/1/earn HTTP/1.1
 Content-Type: application/json
 Content-Length: 71
-Host: localhost:8080
+Host: localhost:8500
 
 {
-  "uuid" : "429abd58-3d91-4428-9ed1-d9b9948bb0f2",
+  "uuid" : "31ac7050-9e70-4e8e-8b95-2b611e0280c6",
   "point" : 1000
 }</code></pre>
 </div>
@@ -559,16 +559,29 @@ Content-Length: 46
 </table>
 </div>
 <div class="sect3">
+<h4 id="회원별-포인트-사용_curl_request">Curl request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8500/api/v1/points/1/deduct' -i -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{
+  "uuid" : "649533a0-037a-48d4-981e-75234bab7033",
+  "point" : 1000
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="회원별-포인트-사용_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/points/1/deduct HTTP/1.1
 Content-Type: application/json
 Content-Length: 71
-Host: localhost:8080
+Host: localhost:8500
 
 {
-  "uuid" : "7706e82a-cb6f-459b-bd38-96e824afc2d0",
+  "uuid" : "649533a0-037a-48d4-981e-75234bab7033",
   "point" : 1000
 }</code></pre>
 </div>
@@ -666,7 +679,7 @@ Content-Length: 88
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/points/1/cancel-deduct HTTP/1.1
 Content-Type: application/json
 Content-Length: 25
-Host: localhost:8080
+Host: localhost:8500
 
 {
   "deductPointNo" : 1
@@ -730,8 +743,8 @@ Content-Length: 46
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-10-03 22:33:55 +0900
+Version 0.0.1-20221004231621<br>
+Last updated 2022-10-04 23:00:49 +0900
 </div>
 </div>
 </body>

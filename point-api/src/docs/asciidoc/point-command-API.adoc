@@ -9,7 +9,7 @@ operation::point-command-controller-test/earn-point[snippets='path-parameters,ht
 [[회원별-포인트-사용]]
 === 회원별 포인트 사용
 
-operation::point-command-controller-test/deduct-point[snippets='path-parameters,http-request,http-response,response-fields']
+operation::point-command-controller-test/deduct-point[snippets='path-parameters,curl-request,http-request,http-response,response-fields']
 
 [[회원별-포인트-사용-취소]]
 === 회원별 포인트 사용 취소

@@ -1,12 +1,6 @@
 [[Code]]
 == Code
 
-[[code-use-yn]]
-=== UseYn
-
-- Yes/No를 구분.
-include::{snippets}/common-code-document/use-yn/response-body.adoc[]
-
 [[code-row-sts-cd]]
 === RowStsCd
 
