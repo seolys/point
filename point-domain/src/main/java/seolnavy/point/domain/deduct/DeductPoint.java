@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -24,6 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Comment;
 import seolnavy.point.domain.BaseEntity;
 import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 
@@ -35,7 +37,10 @@ import seolnavy.point.domain.deduct.exception.PointsAlreadyCancelledException;
 @Entity
 @Table(
 		name = "DEDUCT_POINT",
-		uniqueConstraints = @UniqueConstraint(name = "UNI_DEDUCT_POINT_UUID", columnNames = {"DEDUCT_UUID"})
+		uniqueConstraints = @UniqueConstraint(name = "UNIQUE_DEDUCT_POINT__DEDUCT_UUID", columnNames = {"DEDUCT_UUID"}),
+		indexes = {
+				@Index(name = "INDEX_DEDUCT_POINT__EARN_UUID", columnList = "DEDUCT_UUID")
+		}
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -46,24 +51,30 @@ public class DeductPoint extends BaseEntity<Long> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
+	@Comment("포인트차감번호")
 	@Column(name = "DEDUCT_POINT_NO", nullable = false)
-	private Long deductPointNo; // 포인트차감번호
+	private Long deductPointNo;
 
-	@Column(name = "DEDUCT_UUID", nullable = false)
-	private String deductUuid; // 차감 UUID
+	@Comment("차감 UUID")
+	@Column(name = "DEDUCT_UUID", unique = true, nullable = false)
+	private String deductUuid;
 
+	@Comment("회원번호")
 	@Column(name = "USER_NO", nullable = false)
-	private Long userNo; // 회원번호
+	private Long userNo; //
 
+	@Comment("차감포인트")
 	@Column(name = "DEDUCT_POINT", nullable = false)
-	private Long deductPoint; // 차감포인트
+	private Long deductPoint;
 
+	@Comment("포인트 사용 상태")
 	@Column(name = "DEDUCT_STATUS", length = 15, nullable = false) @Enumerated(EnumType.STRING)
-	private DeductPointStatus deductStatus; // 포인트 사용 상태
+	private DeductPointStatus deductStatus;
 
 	@Version
+	@Comment("버전")
 	@Column(name = "VERSION", nullable = false)
-	private Long version; // 버전
+	private Long version;
 
 	@Default
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "deductPoint", cascade = CascadeType.PERSIST)

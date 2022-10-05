@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Comment;
 import seolnavy.point.domain.BaseEntity;
 import seolnavy.point.domain.user.exception.RemainPointsIsMinusException;
 
@@ -26,15 +27,18 @@ public class User extends BaseEntity<Long> {
 
 	@Id
 	@EqualsAndHashCode.Include
+	@Comment("회원번호")
 	@Column(name = "USER_NO", nullable = false)
-	private Long userNo; // 회원번호
+	private Long userNo;
 
+	@Comment("잔여포인트")
 	@Column(name = "REMAIN_POINT", nullable = false)
-	private Long remainPoint; // 잔여포인트
+	private Long remainPoint;
 
 	@Version
+	@Comment("버전")
 	@Column(name = "VERSION", nullable = false)
-	private Long version; // 버전
+	private Long version;
 
 	public void increasePoint(final Long point) {
 		this.remainPoint += point;

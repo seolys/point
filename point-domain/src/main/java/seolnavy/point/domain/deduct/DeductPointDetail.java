@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,11 +16,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Comment;
 import seolnavy.point.domain.BaseEntity;
 
 @Getter
 @Entity
-@Table(name = "DEDUCT_POINT_DETAIL")
+@Table(
+		name = "DEDUCT_POINT_DETAIL",
+		indexes = {
+				@Index(name = "INDEX_DEDUCT_POINT_DETAIL__DEDUCT_POINT_NO", columnList = "DEDUCT_POINT_NO")
+		}
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)
@@ -29,17 +36,21 @@ public class DeductPointDetail extends BaseEntity<Long> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
+	@Comment("포인트사용상세번호")
 	@Column(name = "USED_POINT_DETAIL_NO", nullable = false)
-	private Long usedPointDetailNo; // 포인트사용상세번호
+	private Long usedPointDetailNo;
 
+	@Comment("포인트차감번호")
 	@Column(name = "DEDUCT_POINT_NO", nullable = false)
-	private Long deductPointNo; // 포인트차감번호
+	private Long deductPointNo;
 
+	@Comment("적립포인트번호")
 	@Column(name = "EARN_POINT_NO", nullable = false)
-	private Long earnPointNo; // 적립포인트번호
+	private Long earnPointNo;
 
+	@Comment("차감포인트")
 	@Column(name = "DEDUCT_POINT", nullable = false)
-	private Long point; // 차감포인트
+	private Long point;
 
 	@ManyToOne
 	@JoinColumn(name = "DEDUCT_POINT_NO", insertable = false, updatable = false)

@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -19,6 +20,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
 import seolnavy.point.domain.BaseEntity;
 import seolnavy.point.domain.UseYn;
 
@@ -29,7 +32,11 @@ import seolnavy.point.domain.UseYn;
 @Entity
 @Table(
 		name = "EARN_POINT",
-		uniqueConstraints = @UniqueConstraint(name = "UNI_EARN_POINT_UUID", columnNames = {"EARN_UUID"})
+		uniqueConstraints = @UniqueConstraint(name = "UNIQUE_EARN_POINT__EARN_POINT_UUID", columnNames = {"EARN_UUID"}),
+		indexes = {
+				@Index(name = "INDEX_EARN_POINT__EARN_UUID", columnList = "EARN_UUID"),
+				@Index(name = "INDEX_EARN_POINT__EXPIRATION_DATE", columnList = "EXPIRATION_DATE"),
+		}
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,32 +47,40 @@ public class EarnPoint extends BaseEntity<Long> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
+	@Comment("적립포인트번호")
 	@Column(name = "EARN_POINT_NO", nullable = false)
-	private Long earnPointNo; // 적립포인트번호
+	private Long earnPointNo;
 
-	@Column(name = "EARN_UUID", nullable = false)
-	private String earnUuid; // 적립_UUID
+	@Comment("적립_UUID")
+	@Column(name = "EARN_UUID", unique = true, nullable = false)
+	private String earnUuid;
 
+	@Comment("회원번호")
 	@Column(name = "USER_NO", nullable = false)
-	private Long userNo; // 회원번호
+	private Long userNo;
 
+	@Comment("적립포인트")
 	@Column(name = "EARN_POINT", nullable = false)
-	private Long earnPoint; // 적립포인트
+	private Long earnPoint;
 
+	@Comment("잔여포인트")
 	@Column(name = "REMAIN_POINT", nullable = false)
-	private Long remainPoint; // 잔여포인트
+	private Long remainPoint;
 
-	@Column(name = "EXPIRATION_YN", nullable = false)
+	@Comment("만료여부")
 	@Enumerated(EnumType.STRING)
-	@Default
-	private UseYn expirationYn = UseYn.N; // 만료여부
+	@ColumnDefault("'N'") @Default
+	@Column(name = "EXPIRATION_YN", nullable = false)
+	private UseYn expirationYn = UseYn.N;
 
+	@Comment("만료일자")
 	@Column(name = "EXPIRATION_DATE", nullable = false)
-	private LocalDate expirationDate; // 만료일자
+	private LocalDate expirationDate;
 
 	@Version
+	@Comment("버전")
 	@Column(name = "VERSION", nullable = false)
-	private Long version; // 버전
+	private Long version;
 
 	/**
 	 * 포인트 차감
@@ -114,7 +129,6 @@ public class EarnPoint extends BaseEntity<Long> {
 				.userNo(userNo) // 회원번호
 				.earnPoint(earnPoint) // 적립포인트
 				.remainPoint(earnPoint) // 잔여포인트
-				.expirationYn(UseYn.N) // 만료여부
 				.expirationDate(LocalDate.now().plusYears(1)) // 만료일자
 				.build();
 	}

@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,13 +17,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Comment;
 import seolnavy.point.domain.BaseEntity;
 import seolnavy.point.domain.history.exception.UncancellableException;
 
 @Slf4j
 @Getter
 @Entity
-@Table(name = "POINT_HISTORY")
+@Table(
+		name = "POINT_HISTORY",
+		indexes = {
+				@Index(name = "INDEX_POINT_HISTORY__DEDUCT_POINT_NO", columnList = "DEDUCT_POINT_NO"),
+				@Index(name = "INDEX_POINT_HISTORY__USER_NO__CREATED_DATE", columnList = "USER_NO, CREATED_DATE")
+		}
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "entityBuilder", toBuilder = true)
@@ -31,23 +39,30 @@ public class PointHistory extends BaseEntity<Long> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
+	@Comment("포인트내역번호")
 	@Column(name = "POINT_HISTORY_NO", nullable = false)
-	private Long pointHistoryNo; // 포인트내역번호
+	private Long pointHistoryNo;
 
+	@Comment("회원번호")
 	@Column(name = "USER_NO", nullable = false)
-	private Long userNo; // 회원번호
+	private Long userNo;
 
+	@Comment("적립포인트번호")
 	@Column(name = "EARN_POINT_NO")
-	private Long earnPointNo; // 적립포인트번호
+	private Long earnPointNo;
 
+	@Comment("포인트차감번호")
 	@Column(name = "DEDUCT_POINT_NO")
-	private Long deductPointNo; // 포인트차감번호
+	private Long deductPointNo;
 
-	@Column(name = "HISTORY_TYPE", length = 20, nullable = false) @Enumerated(EnumType.STRING)
-	private PointHistoryType historyType; // 내역구분
+	@Comment("내역구분")
+	@Enumerated(EnumType.STRING)
+	@Column(name = "HISTORY_TYPE", length = 20, nullable = false)
+	private PointHistoryType historyType;
 
+	@Comment("포인트")
 	@Column(name = "POINT", nullable = false)
-	private Long point; // 포인트
+	private Long point;
 
 	/**
 	 * 포인트 차감 취소<br/>
