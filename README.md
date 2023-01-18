@@ -27,7 +27,7 @@ java -jar ./point-api/build/libs/point-api-*.jar
 # 프로젝트 설명
 
 - JAVA 11, SpringBoot
-- 멀티 모듈로 구성하여 레이어 간 의존성을 분리.<br/>유효기간 만료 배치 서버는 포함하지 못했으나, batch 모듈을 추가한다면 domain, infra 모듈을 재활용 가능.
+- 멀티 모듈로 구성하여 레이어 간 의존성을 분리.<br/>ex) batch 모듈을 추가한다면 domain, infra 모듈을 재활용 가능할 것이라 기대.
 - Redis를 활용하여 회원별 포인트 조회 시 서버 부하 최소화<br/>RDBMS와 Redis의 데이터를 동기화하기 위해 @TransactionListener를 활용하여 Commit이 일어났을 경우에만 Redis에 증감내용을 갱신.<br/>Redis에 잔여
   포인트를 덮어쓰는 것이 아니라 증감내용만 갱신하기 때문에 RDBMS와 불일치 요소를 줄임.
     ```
