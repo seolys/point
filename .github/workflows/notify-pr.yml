@@ -1,8 +1,8 @@
 name: Notify Unreviewed PRs
 
 on:
-  schedule:
-    - cron: '0 1 * * 1-5'  # UTC 기준으로는 매일 1시에 실행, 한국 시간으로는 월요일~금요일까지 아침 10시에 해당한다.
+  # schedule:
+  #   - cron: '0 1 * * 1-5'  # UTC 기준으로는 매일 1시에 실행, 한국 시간으로는 월요일~금요일까지 아침 10시에 해당한다.
   workflow_dispatch:
 
 jobs:
