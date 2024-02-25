@@ -24,7 +24,8 @@ jobs:
 
     - name: Notify Unreviewed PRs
       run: |
-        cd point/.github/workflows  # 스크립트가 있는 디렉토리로 이동
+        pwd
+        cd .github/workflows  # 스크립트가 있는 디렉토리로 이동
         python notify_prs.py
       env:
         SLACK_WEBHOOK_URL: TEST
