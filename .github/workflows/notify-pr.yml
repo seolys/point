@@ -1,0 +1,57 @@
+name: Notify Unreviewed PRs
+
+on:
+  schedule:
+    - cron: '0 1 * * 1-5'  # UTC 기준으로는 매일 1시에 실행, 한국 시간으로는 월요일~금요일까지 아침 10시에 해당한다.
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install @actions/core axios
+
+    - name: Notify Unreviewed PRs
+      shell: bash
+      run: |
+        const axios = require('axios');
+        const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+        const repoOwner = process.env.REPOSITORY_OWNER;
+        const repoName = process.env.REPOSITORY_NAME;
+
+        // GitHub API 호출을 통해 리뷰되지 않은 PR 가져오기
+        const response = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=open&sort=created&direction=asc`);
+        const unreviewedPRs = response.data.filter(pr => pr.requested_reviewers.length === 0);
+
+        // 각 PR에 대한 정보를 메시지로 구성
+        const prMessages = unreviewedPRs.map(pr => {
+          const createdAt = new Date(pr.created_at);
+          const currentDate = new Date();
+          const daysSinceCreation = Math.floor((currentDate - createdAt) / (1000 * 60 * 60 * 24));
+
+          const prLink = `<https://github.com/${repoOwner}/${repoName}/pull/${pr.number}|${pr.title}>`;
+          
+          return `*PR 제목:* ${prLink}\n*작성자:* ${pr.user.login}\n*등록일로부터 경과 일수:* ${daysSinceCreation}일\n---`;
+        });
+
+        // 슬랙으로 알림 보내기
+        /*
+        await axios.post(SLACK_WEBHOOK_URL, {
+          text: `리뷰가 필요한 PR이 ${unreviewedPRs.length}개 있습니다.\n\n${prMessages.join('\n')}`,
+        });
+        */
+        console.log(`리뷰가 필요한 PR이 ${unreviewedPRs.length}개 있습니다.\n\n${prMessages.join('\n')}`)
+      env:
+        SLACK_WEBHOOK_URL: TEST
+        REPOSITORY_OWNER: seolys
+        REPOSITORY_NAME: point
