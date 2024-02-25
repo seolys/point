@@ -20,9 +20,9 @@ def notify_prs(slack_webhook_url, repo_owner, repo_name):
     }
 
 if __name__ == '__main__':
-    slack_webhook_url = input("Enter Slack Webhook URL: ")
-    repo_owner = input("Enter Repository Owner: ")
-    repo_name = input("Enter Repository Name: ")
+    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
+    repo_owner = os.environ.get('REPOSITORY_OWNER')
+    repo_name = os.environ.get('REPOSITORY_NAME')
 
     message = notify_prs(slack_webhook_url, repo_owner, repo_name)
     print(message['text'])
